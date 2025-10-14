@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * // Serves static files securely
+ *  Serves static files securely
  */
 public class StaticFileServer {
     private final Path staticRoot;
