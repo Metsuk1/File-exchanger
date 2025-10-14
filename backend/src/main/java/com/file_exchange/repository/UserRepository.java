@@ -1,37 +1,60 @@
 package com.file_exchange.repository;
 
-import com.file_exchange.entity.User;
 
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
+import com.file_exchange.dto.UserDto;
+
+import java.sql.*;
+
 
 public class UserRepository {
-    private final ConcurrentHashMap<Long, User> users = new ConcurrentHashMap<>();
-    private final AtomicLong idGenerator = new AtomicLong(1);
+    private final Connection conn;
 
-    public List<User> findAll() {
-        return users.values().stream().collect(Collectors.toList());
-    }
-
-    public User findById(Long id) {
-        return users.get(id);
-    }
-
-    public User save(User user) {
-        if (user.getId() == null) {
-            user.setId(idGenerator.getAndIncrement());
+    public UserRepository() {
+        try {
+            conn = DriverManager.getConnection("jdbc:sqlite:users.db");
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to connect to database", e);
         }
-        users.put(user.getId(), user);
-        return user;
     }
 
-    public void delete(Long id) {
-        users.remove(id);
+    public UserDto createUser(UserDto userDto, String password) {
+        try(PreparedStatement stmt = conn.prepareStatement(
+                "INSERT INTO users (name,email,password) VALUES (?, ?, ?)",
+                PreparedStatement.RETURN_GENERATED_KEYS)){
+            stmt.setString(1,userDto.getName());
+            stmt.setString(2,userDto.getEmail());
+            stmt.setString(3,password);
+            stmt.executeUpdate();
+
+            try (ResultSet rs = stmt.getGeneratedKeys()){
+                if(rs.next()){
+                    userDto.setId(rs.getLong(1));
+                }
+            }
+
+            return userDto;
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create user", e);
+        }
     }
 
-    public boolean existsById(Long id) {
-        return users.containsKey(id);
+    public UserDto findUserByEmail(String email) {
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE email = ?")){
+            stmt.setString(1,email);
+            try (ResultSet rs = stmt.executeQuery()){
+                if(rs.next()){
+                    UserDto userDto = new UserDto();
+                    userDto.setId(rs.getLong("id"));
+                    userDto.setName(rs.getString("name"));
+                    userDto.setEmail(rs.getString("email"));
+
+                    return userDto;
+                }
+
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find user by email", e);
+        }
     }
 }
