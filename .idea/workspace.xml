@@ -4,10 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b1f45e2e-e790-4b21-9b36-893dbada4aca" name="Changes" comment="refactor(backend):created directory backend">
-      <change afterPath="$PROJECT_DIR$/backend/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/StaticFileServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/StaticFileServer.java" afterDir="false" />
+    <list default="true" id="b1f45e2e-e790-4b21-9b36-893dbada4aca" name="Changes" comment="refactor(frontend):created directory frontend">
+      <change afterPath="$PROJECT_DIR$/.github/workflows/ci.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/annotations/CustomRequestHeader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/annotations/CustomRequestPart.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/FileController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/db/DatabaseInitializer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/repository/FileRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/FileService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/utils/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/dto/UserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/dto/UserDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +32,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Dockerfile" />
+        <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -158,6 +174,9 @@
       <workItem from="1760379853769" duration="238000" />
       <workItem from="1760380103654" duration="222000" />
       <workItem from="1760380333042" duration="1635000" />
+      <workItem from="1760435519389" duration="2196000" />
+      <workItem from="1760464790168" duration="4296000" />
+      <workItem from="1760469105059" duration="1074000" />
     </task>
     <task id="LOCAL-00001" summary="refactor(backend):created directory backend">
       <option name="closed" value="true" />
@@ -167,7 +186,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760380706237</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="refactor(frontend):created directory frontend">
+      <option name="closed" value="true" />
+      <created>1760435627375</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1760435627375</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,6 +202,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="refactor(backend):created directory backend" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor(backend):created directory backend" />
+    <MESSAGE value="refactor(frontend):created directory frontend" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor(frontend):created directory frontend" />
   </component>
 </project>

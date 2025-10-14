@@ -16,33 +16,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @CustomGetMapping
-    public List<UserDto> getAllUsers() {
-        return userService.getAllUsers();
+    @CustomPostMapping("/register")
+    public UserDto register(@CustomRequestBody UserDto dto, @CustomRequestParam("password") String password) {
+        return userService.register(dto, password);
     }
 
-    @CustomGetMapping("/{id}")
-    public UserDto getUserById(@CustomPathVariable("id") Long id) {
-        return userService.getUserById(id);
-    }
-
-    @CustomPostMapping
-    public UserDto createUser(@CustomRequestBody UserDto user) {
-        return userService.createUser(user);
-    }
-
-    @CustomPutMapping("/{id}")
-    public UserDto updateUser(@CustomPathVariable("id") Long id, @CustomRequestBody UserDto user) {
-        return userService.updateUser(id, user);
-    }
-
-    @CustomPatchMapping("/{id}")
-    public UserDto patchUser(@CustomPathVariable("id") Long id, @CustomRequestBody Map<String, Object> updates) {
-        return userService.patchUser(id, updates);
-    }
-
-    @CustomDeleteMapping("/{id}")
-    public void deleteUser(@CustomPathVariable("id") Long id) {
-        userService.deleteUser(id);
+    @CustomPostMapping("/login")
+    public Map<String, String> login(@CustomRequestParam("email") String email,
+                                     @CustomRequestParam("password") String password) {
+        return Map.of("token", userService.login(email, password));
     }
 }
