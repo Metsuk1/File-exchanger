@@ -1,14 +1,15 @@
 package com.file_exchange.handlers.dispatcher;
 
-import com.file_exchange.annotations.CustomPathVariable;
-import com.file_exchange.annotations.CustomRequestBody;
-import com.file_exchange.annotations.CustomRequestParam;
+import com.file_exchange.annotations.*;
 import com.file_exchange.http.HttpRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class ParameterBinder {
     public Object[] bindParameters(Method method, HttpRequest request,String mappingPath) throws IOException {
         var params = method.getParameters();
         Object[] args = new Object[params.length];
-        Map<String, String> queryParams = parseQueryParams(request.getPath());
+        Map<String, String> queryParams = parseQueryParams(request.getPath(), request.getBody());
         Map<String, String> pathVariables = extractPathVariables(mappingPath, request.getPath());
 
         for (int i = 0; i < params.length; i++) {
@@ -37,8 +38,23 @@ public class ParameterBinder {
             } else if (params[i].isAnnotationPresent(CustomPathVariable.class)) {
                 String name = params[i].getAnnotation(CustomPathVariable.class).value();
                 args[i] = convertValue(pathVariables.get(name), params[i].getType());
+            }else if (params[i].isAnnotationPresent(CustomRequestHeader.class)){
+                String name = params[i].getAnnotation(CustomRequestHeader.class).value();
+                args[i] = request.getHeaders().get(name);
+            }else if (params[i].isAnnotationPresent(CustomRequestPart.class)) {
+                String name = params[i].getAnnotation(CustomRequestPart.class).value();
+                if (params[i].getType() == InputStream.class) {
+                    args[i] = request.getPartAsStream(name);
+                } else if (params[i].getType() == String.class) {
+                    args[i] = request.getPartAsString(name);
+                } else if (params[i].getType() == Long.class || params[i].getType() == long.class) {
+                    args[i] = request.getPartAsLong(name);
+                } else {
+                    throw new IllegalArgumentException("Unsupported type for @CustomRequestPart: " + params[i].getType().getName());
+                }
             }
         }
+
         return args;
     }
 
@@ -68,15 +84,29 @@ public class ParameterBinder {
         return value;
     }
 
-    private Map<String, String> parseQueryParams(String path) {
+    private Map<String, String> parseQueryParams(String path,String body) {
         Map<String, String> params = new HashMap<>();
+        // Parse query string
         if (path.contains("?")) {
             String query = path.substring(path.indexOf("?") + 1);
-            for (String pair : query.split("&")) {
-                String[] kv = pair.split("=");
-                if (kv.length == 2) {
-                    params.put(kv[0], kv[1]);
-                }
+            params.putAll(parsePairs(query));
+        }
+        // Parse form-urlencoded body
+        if (body != null && !body.isEmpty() && body.contains("=")) {
+            params.putAll(parsePairs(body));
+        }
+
+        return params;
+    }
+
+    private Map<String, String> parsePairs(String query) {
+        Map<String, String> params = new HashMap<>();
+        for (String pair : query.split("&")) {
+            String[] kv = pair.split("=");
+            if (kv.length == 2) {
+                String key = URLDecoder.decode(kv[0], StandardCharsets.UTF_8);
+                String value = URLDecoder.decode(kv[1], StandardCharsets.UTF_8);
+                params.put(key, value);
             }
         }
         return params;

@@ -23,9 +23,14 @@ public class UserService {
 
     public String login(String email, String password) {
         UserDto user = userRepository.findUserByEmail(email);
-        if (user == null || !user.getPassword().equals(password)) {
-            throw new IllegalArgumentException("Invalid email or password");
+        if (user == null) {
+            throw new IllegalArgumentException("user null");
         }
-        return JwtUtil.generateToken(email);
+        if(!user.getPassword().equals(password)){
+            throw new IllegalArgumentException("Invalid password");
+        }
+
+        String token = JwtUtil.generateToken(user.getId());
+        return token;
     }
 }

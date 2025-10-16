@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f7f9fc;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0066cc;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .section {
+            margin-bottom: 25px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        input {
+            padding: 7px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: calc(100% - 20px);
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: #0066cc;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background-color: #004999;
+        }
+
+        .result-box {
+            background-color: #f0f4f8;
+            border-radius: 8px;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .success {
+            background-color: #e1f7e7;
+            color: #0b6b20;
+        }
+
+        .error {
+            background-color: #fde4e4;
+            color: #a10000;
+        }
+    </style>
+</head>
+<body>
+<h1>👥 User Management</h1>
+
+<div class="container">
+
+    <div class="section">
+        <h3>📋 Get All Users</h3>
+        <button onclick="getAllUsers()">Get All</button>
+        <div id="allUsersResult" class="result-box"></div>
+    </div>
+
+    <div class="section">
+        <h3>🔍 Get User by ID</h3>
+        <input type="number" id="userIdInput" placeholder="User ID" min="1">
+        <button onclick="getUserById()">Find</button>
+        <div id="userResult" class="result-box"></div>
+    </div>
+
+    <div class="section">
+        <h3>➕ Create User</h3>
+        <input type="text" id="userNameInput" placeholder="Name">
+        <input type="email" id="userEmailInput" placeholder="Email">
+        <button onclick="createUser()">Create</button>
+        <div id="createUserResult" class="result-box"></div>
+    </div>
+
+    <div class="section">
+        <h3>✏️ Update User</h3>
+        <input type="number" id="updateUserIdInput" placeholder="User ID" min="1">
+        <input type="text" id="updateUserNameInput" placeholder="New Name">
+        <input type="email" id="updateUserEmailInput" placeholder="New Email">
+        <button onclick="updateUser()">Update</button>
+        <div id="updateUserResult" class="result-box"></div>
+    </div>
+
+    <div class="section">
+        <h3>❌ Delete User</h3>
+        <input type="number" id="deleteUserIdInput" placeholder="User ID" min="1">
+        <button onclick="deleteUser()">Delete</button>
+        <div id="deleteUserResult" class="result-box"></div>
+    </div>
+
+</div>
+
+<script>
+    const API_BASE = "/api/v1/users";
+
+    async function handleResponse(res, outputId) {
+        const box = document.getElementById(outputId);
+        box.classList.remove('error', 'success');
+        try {
+            const text = await res.text();
+            let data;
+            try { data = JSON.parse(text); } catch { data = text; }
+
+            if (res.ok) {
+                box.classList.add('success');
+                box.innerHTML = typeof data === "object"
+                    ? JSON.stringify(data, null, 2)
+                    : data;
+            } else {
+                box.classList.add('error');
+                box.innerHTML = "❗ Error: " + (data.error || data || res.status);
+            }
+        } catch (e) {
+            box.classList.add('error');
+            box.innerHTML = "❗ Failed: " + e.message;
+        }
+    }
+
+    async function getAllUsers() {
+        const res = await fetch(API_BASE);
+        await handleResponse(res, "allUsersResult");
+    }
+
+    async function getUserById() {
+        const id = document.getElementById("userIdInput").value;
+        if (!id) return alert("Enter user ID");
+        const res = await fetch(`${API_BASE}/${id}`);
+        await handleResponse(res, "userResult");
+    }
+
+    async function createUser() {
+        const name = document.getElementById("userNameInput").value;
+        const email = document.getElementById("userEmailInput").value;
+        if (!name || !email) return alert("Enter name and email");
+        const res = await fetch(API_BASE, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ name, email })
+        });
+        await handleResponse(res, "createUserResult");
+    }
+
+    async function updateUser() {
+        const id = document.getElementById("updateUserIdInput").value;
+        const name = document.getElementById("updateUserNameInput").value;
+        const email = document.getElementById("updateUserEmailInput").value;
+        if (!id) return alert("Enter ID");
+        const res = await fetch(`${API_BASE}/${id}`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ name, email })
+        });
+        await handleResponse(res, "updateUserResult");
+    }
+
+    async function deleteUser() {
+        const id = document.getElementById("deleteUserIdInput").value;
+        if (!id) return alert("Enter ID");
+        const res = await fetch(`${API_BASE}/${id}`, { method: "DELETE" });
+        await handleResponse(res, "deleteUserResult");
+    }
+</script>
+</body>
+</html>

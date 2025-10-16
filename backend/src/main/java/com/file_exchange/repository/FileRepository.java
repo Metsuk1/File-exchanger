@@ -1,13 +1,9 @@
 package com.file_exchange.repository;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
+import com.file_exchange.entity.File;
 import java.util.List;
-import java.util.Map;
 
 public class FileRepository {
     private final Connection conn;
@@ -20,31 +16,42 @@ public class FileRepository {
         }
     }
 
-    public void saveFile(Long userId, String fileName, String filePath, long size) {
-        try (PreparedStatement stmt = conn.prepareStatement(
-                "INSERT INTO files (user_id, file_name, file_path, size) VALUES (?, ?, ?, ?)")) {
-            stmt.setLong(1, userId);
-            stmt.setString(2, fileName);
-            stmt.setString(3, filePath);
-            stmt.setLong(4, size);
+    public Long saveFile(File file) {
+        String sql = "INSERT INTO files (user_id, file_name, file_path, size) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
+            stmt.setLong(1, file.getUserId());
+            stmt.setString(2, file.getFileName());
+            stmt.setString(3, file.getFilePath());
+            stmt.setLong(4, file.getSize());
             stmt.executeUpdate();
+
+            try(ResultSet rs = stmt.getGeneratedKeys()) {
+                if(rs.next()) {
+                    file.setId(rs.getLong(1));
+                }else{
+                    throw new SQLException("Failed to get generated file ID");
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to save file", e);
         }
+
+        return file.getId(); // to change,maybe return null ?
     }
 
-    public List<Map<String, Object>> getUserFiles(Long userId) {
-        List<Map<String, Object>> files = new ArrayList<>();
+    public List<File> getUserFiles(Long userId) {
+        List<File> files = new ArrayList<>();
         try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM files WHERE user_id = ?")) {
             stmt.setLong(1, userId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Map<String, Object> file = new HashMap<>();
-                    file.put("id", rs.getLong("id"));
-                    file.put("file_name", rs.getString("file_name"));
-                    file.put("file_path", rs.getString("file_path"));
-                    file.put("size", rs.getLong("size"));
-                    files.add(file);
+                    File file = new File();
+                    file.setId(rs.getLong("id"));
+                    file.setUserId(rs.getLong("user_id"));
+                    file.setFileName(rs.getString("file_name"));
+                    file.setFilePath(rs.getString("file_path"));
+                    file.setSize(rs.getLong("size"));
+                    files.add(file); // To change
                 }
             }
         } catch (SQLException e) {
@@ -53,30 +60,25 @@ public class FileRepository {
         return files;
     }
 
-    public String getFilePath(Long fileId, Long userId) {
-        try (PreparedStatement stmt = conn.prepareStatement("SELECT file_path FROM files WHERE id = ? AND user_id = ?")) {
+
+    public File getFileById(Long fileId, Long userId) {
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM files WHERE id = ? AND user_id = ?")) {
             stmt.setLong(1, fileId);
             stmt.setLong(2, userId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getString("file_path");
+                    File file = new File();
+                    file.setId(rs.getLong("id"));
+                    file.setUserId(rs.getLong("user_id"));
+                    file.setFileName(rs.getString("file_name"));
+                    file.setFilePath(rs.getString("file_path"));
+                    file.setSize(rs.getLong("size"));
+                    return file;
                 }
                 return null;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to get file path", e);
+            throw new RuntimeException("Failed to get file", e);
         }
-    }
-
-    public InputStream getUserFile(Long userId, Long fileId) {
-        String filePath = getFilePath(fileId, userId);
-        if (filePath != null) {
-            try {
-                return new FileInputStream(filePath);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException("File not found", e);
-            }
-        }
-        throw new IllegalArgumentException("File not found for user " + userId);
     }
 }
