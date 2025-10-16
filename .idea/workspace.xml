@@ -4,31 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b1f45e2e-e790-4b21-9b36-893dbada4aca" name="Changes" comment="Enhancement(backend):Added File(repository,service,controller) and updated User(repository,service,controller)to support authentication">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/entity/File.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/cli/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/cli/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/FileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/HttpRequestParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/HttpRequestParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/ParameterBinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/ParameterBinder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/http/HttpRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/http/HttpRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/repository/FileRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/repository/FileRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/FileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/FileService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/utils/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/utils/JwtUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/cli/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/cli/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/controllers/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/controllers/UserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/dto/UserDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/dto/UserDto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/HttpRequestParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/HttpRequestParser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/ParameterBinder.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/ParameterBinder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/http/HttpRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/http/HttpRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/repository/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/repository/UserRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/services/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/services/UserService.class" afterDir="false" />
-    </list>
+    <list default="true" id="b1f45e2e-e790-4b21-9b36-893dbada4aca" name="Changes" comment="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -58,10 +34,10 @@
     &quot;accountId&quot;: &quot;723e6cd7-d2dd-4fd5-8219-d35cf06e76e8&quot;
   }
 }</component>
-  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "isMigrated": true
-}]]></component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -204,6 +180,7 @@
       <workItem from="1760520476317" duration="3000" />
       <workItem from="1760533348539" duration="7000" />
       <workItem from="1760547838932" duration="12227000" />
+      <workItem from="1760635830512" duration="295000" />
     </task>
     <task id="LOCAL-00001" summary="refactor(backend):created directory backend">
       <option name="closed" value="true" />
@@ -229,7 +206,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760470508230</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload">
+      <option name="closed" value="true" />
+      <created>1760635930779</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1760635930779</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -240,6 +225,7 @@
     <MESSAGE value="refactor(frontend):created directory frontend" />
     <MESSAGE value="Enhancement:Added File(repository,service,controller) and updated User(repository,service,controller)to support authentication" />
     <MESSAGE value="Enhancement(backend):Added File(repository,service,controller) and updated User(repository,service,controller)to support authentication" />
-    <option name="LAST_COMMIT_MESSAGE" value="Enhancement(backend):Added File(repository,service,controller) and updated User(repository,service,controller)to support authentication" />
+    <MESSAGE value="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload" />
+    <option name="LAST_COMMIT_MESSAGE" value="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload" />
   </component>
 </project>
