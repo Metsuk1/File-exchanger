@@ -24,6 +24,8 @@ public class UserController {
     @CustomPostMapping("/login")
     public Map<String, String> login(@CustomRequestParam("email") String email,
                                      @CustomRequestParam("password") String password) {
-        return Map.of("token", userService.login(email, password));
+
+        String token = userService.login(email, password);
+        return Map.of("token", token);
     }
 }
