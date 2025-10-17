@@ -284,7 +284,10 @@ public class CustomExecutorService implements ExecutorService {
             throw new RejectedExecutionException("Executor shutdown");
         }
 
-        workQueue.offer(command);
+        boolean accepted = workQueue.offer(command);
+        if (!accepted) {
+            throw new RejectedExecutionException("Queue is full, task rejected");
+        }
 
     }
 

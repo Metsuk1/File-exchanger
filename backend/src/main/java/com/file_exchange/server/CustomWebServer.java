@@ -62,7 +62,7 @@ public class CustomWebServer {
     @SneakyThrows
     private void handleClient(Socket clientSocket) {
         boolean keepAlive = true;
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        try (InputStream in = clientSocket.getInputStream();
              OutputStream out = clientSocket.getOutputStream()) {
 
             clientSocket.setSoTimeout(30000);
@@ -75,10 +75,13 @@ public class CustomWebServer {
                 requestCount++;
                 if (response == null) break;
 
-                String connectionHeader = request.getHeaders().getOrDefault("connection", "").toLowerCase();
+                String connectionHeader = request.getHeaders().getOrDefault("connection", "")
+                        .toLowerCase();
+
                 if ("close".equals(connectionHeader) || response.getStatusCode() >= 400) {
                     keepAlive = false;
                 }
+
                 sendResponse(out, response, keepAlive);
             }
 

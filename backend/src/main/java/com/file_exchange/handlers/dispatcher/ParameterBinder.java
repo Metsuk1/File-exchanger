@@ -1,6 +1,7 @@
 package com.file_exchange.handlers.dispatcher;
 
 import com.file_exchange.annotations.*;
+import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import com.file_exchange.http.HttpRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -39,16 +40,19 @@ public class ParameterBinder {
                 String name = params[i].getAnnotation(CustomPathVariable.class).value();
                 args[i] = convertValue(pathVariables.get(name), params[i].getType());
             }else if (params[i].isAnnotationPresent(CustomRequestHeader.class)){
-                String name = params[i].getAnnotation(CustomRequestHeader.class).value();
+                String name = params[i].getAnnotation(CustomRequestHeader.class).value().toLowerCase(); // .toLowerCase()
                 args[i] = request.getHeaders().get(name);
             }else if (params[i].isAnnotationPresent(CustomRequestPart.class)) {
                 String name = params[i].getAnnotation(CustomRequestPart.class).value();
+
                 if (params[i].getType() == InputStream.class) {
                     args[i] = request.getPartAsStream(name);
                 } else if (params[i].getType() == String.class) {
                     args[i] = request.getPartAsString(name);
                 } else if (params[i].getType() == Long.class || params[i].getType() == long.class) {
                     args[i] = request.getPartAsLong(name);
+                }else if (params[i].getType() == TempFileInputStream.class){
+                    args[i] = request.getPartAsTempFile(name);
                 } else {
                     throw new IllegalArgumentException("Unsupported type for @CustomRequestPart: " + params[i].getType().getName());
                 }

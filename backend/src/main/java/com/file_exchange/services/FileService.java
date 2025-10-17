@@ -1,11 +1,16 @@
 package com.file_exchange.services;
 
+import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import com.file_exchange.repository.FileRepository;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import com.file_exchange.entity.File;
 
@@ -23,13 +28,38 @@ public class FileService {
         String userDir = uploadsDir + "/" + userId;
         new java.io.File(userDir).mkdirs(); // create dir for user
 
-        String filePath = userDir + "/" + fileName;
-        try (FileOutputStream fos = new FileOutputStream(filePath)) {
-            fileStream.transferTo(fos);
-            File file = new File(null, userId, fileName, filePath, size);
-            return fileRepository.saveFile(file); // return id
+        String safeName = sanitizeFileName(fileName != null ? fileName : "unnamed");
+        String filePath = userDir + "/" + safeName;
+        Path targetPath = Paths.get(filePath);
+
+        try {
+            // if temp file — just move
+            if (fileStream instanceof TempFileInputStream tempStream) {
+                Path tempPath = tempStream.getTempFilePath();
+
+                if (!Files.exists(tempPath)) {
+                    throw new IllegalStateException("Temp file does not exist: " + tempPath);
+                }
+
+                Files.createDirectories(targetPath.getParent());
+
+               try (tempStream) {
+                   Files.copy(tempPath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+               }
+            } else {
+                try (fileStream; FileOutputStream fos = new FileOutputStream(filePath)) {
+                    fileStream.transferTo(fos);
+                }
+            }
+
+            // save metaData in DB
+            File file = new File(null, userId, safeName, filePath, size);
+            Long fileId = fileRepository.saveFile(file);
+
+            return fileId;
+
         } catch (Exception e) {
-            throw new IllegalArgumentException("Failed to upload file: " + e.getMessage());
+            throw new IllegalArgumentException("Failed to upload file '" + fileName + "' for user " + userId + ": " + e.getMessage(), e);
         }
     }
 
@@ -48,5 +78,13 @@ public class FileService {
             throw new RuntimeException("File not found", e);
         }
 
+    }
+
+    private String sanitizeFileName(String fileName) {
+        if (fileName == null) return "unnamed";
+        // remove path only the name of file
+        fileName = Paths.get(fileName).getFileName().toString();
+        // replace danger symbols
+        return fileName.replaceAll("[^a-zA-Z0-9._-]", "_");
     }
 }
