@@ -4,7 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b1f45e2e-e790-4b21-9b36-893dbada4aca" name="Changes" comment="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload" />
+    <list default="true" id="5e16da65-850a-44bd-a71e-facb4ddbdd8d" name="Changes" comment="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/utilsFiles/InputStreamRequestContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/utilsFiles/TempFileInputStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/FileController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/executor/CustomExecutorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/executor/CustomExecutorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/HttpRequestParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/HttpRequestParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/ParameterBinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/ParameterBinder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/http/HttpRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/http/HttpRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/server/CustomWebServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/server/CustomWebServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/FileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/FileService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/controllers/FileController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/controllers/FileController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/HttpRequestParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/HttpRequestParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/ParameterBinder.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/ParameterBinder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/http/HttpRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/http/HttpRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/server/CustomWebServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/server/CustomWebServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/services/FileService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/services/FileService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/test-classes/com/file_exchange/UserServiceTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/users.db" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,8 +33,6 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Dockerfile" />
-        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -22,26 +40,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;Metsuk1&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Metsuk1/File-exchanger&quot;,
-    &quot;accountId&quot;: &quot;723e6cd7-d2dd-4fd5-8219-d35cf06e76e8&quot;
-  }
-}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 0
+  &quot;associatedIndex&quot;: 1
 }</component>
-  <component name="ProjectId" id="33yOOWOipsXyznYGPtM0W9xHUxw" />
+  <component name="ProjectId" id="349qnpKsFRIFUle32rUNM45NhjY" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -50,30 +56,17 @@
   &quot;keyToString&quot;: {
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.CustomExecutorServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CustomWebServerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CustomWebServerTest.testUpdateUser.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.UserServiceTest.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/final_project/File-exchanger/backend/pom.xml&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\final_project\File-exchanger\backend" />
-    </key>
-  </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.file_exchange.cli.Main" />
@@ -103,128 +96,53 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CustomWebServerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="file_exchange" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.file_exchange.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.file_exchange" />
-      <option name="MAIN_CLASS_NAME" value="com.file_exchange.CustomWebServerTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CustomWebServerTest.testUpdateUser" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="file_exchange" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.file_exchange.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.file_exchange" />
-      <option name="MAIN_CLASS_NAME" value="com.file_exchange.CustomWebServerTest" />
-      <option name="METHOD_NAME" value="testUpdateUser" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="UserServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="file_exchange" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.file_exchange.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.file_exchange" />
-      <option name="MAIN_CLASS_NAME" value="com.file_exchange.UserServiceTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
-        <item itemvalue="JUnit.CustomWebServerTest" />
-        <item itemvalue="JUnit.UserServiceTest" />
         <item itemvalue="JUnit.CustomExecutorServiceTest" />
-        <item itemvalue="JUnit.CustomWebServerTest.testUpdateUser" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="b1f45e2e-e790-4b21-9b36-893dbada4aca" name="Changes" comment="" />
-      <created>1760285814635</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1760285814635</updated>
-      <workItem from="1760285815733" duration="46000" />
-      <workItem from="1760349562626" duration="1334000" />
-      <workItem from="1760379853769" duration="238000" />
-      <workItem from="1760380103654" duration="222000" />
-      <workItem from="1760380333042" duration="1635000" />
-      <workItem from="1760435519389" duration="2196000" />
-      <workItem from="1760464790168" duration="4296000" />
-      <workItem from="1760469105059" duration="1545000" />
-      <workItem from="1760515559215" duration="24000" />
-      <workItem from="1760517999278" duration="7000" />
-      <workItem from="1760520476317" duration="3000" />
-      <workItem from="1760533348539" duration="7000" />
-      <workItem from="1760547838932" duration="12227000" />
-      <workItem from="1760635830512" duration="295000" />
-    </task>
-    <task id="LOCAL-00001" summary="refactor(backend):created directory backend">
+    <task id="LOCAL-00001" summary="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload">
       <option name="closed" value="true" />
-      <created>1760380706237</created>
+      <created>1760636259761</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1760380706237</updated>
+      <updated>1760636259761</updated>
     </task>
-    <task id="LOCAL-00002" summary="refactor(frontend):created directory frontend">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5e16da65-850a-44bd-a71e-facb4ddbdd8d" name="Changes" comment="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload" />
+      <created>1760636306230</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1760636306230</updated>
+      <workItem from="1760636308189" duration="42000" />
+      <workItem from="1760636357707" duration="29000" />
+      <workItem from="1760636391220" duration="10326000" />
+      <workItem from="1760691178948" duration="4000" />
+      <workItem from="1760691730946" duration="62000" />
+      <workItem from="1760702395137" duration="372000" />
+      <workItem from="1760706905704" duration="5030000" />
+      <workItem from="1760723115473" duration="3901000" />
+    </task>
+    <task id="LOCAL-00002" summary="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload">
       <option name="closed" value="true" />
-      <created>1760435627375</created>
+      <created>1760636327887</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1760435627375</updated>
+      <updated>1760636327887</updated>
     </task>
-    <task id="LOCAL-00003" summary="Enhancement(backend):Added File(repository,service,controller) and updated User(repository,service,controller)to support authentication">
-      <option name="closed" value="true" />
-      <created>1760470508230</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1760470508230</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload">
-      <option name="closed" value="true" />
-      <created>1760635930779</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1760635930779</updated>
-    </task>
-    <option name="localTasksCounter" value="5" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="refactor(backend):created directory backend" />
-    <MESSAGE value="refactor(frontend):created directory frontend" />
-    <MESSAGE value="Enhancement:Added File(repository,service,controller) and updated User(repository,service,controller)to support authentication" />
-    <MESSAGE value="Enhancement(backend):Added File(repository,service,controller) and updated User(repository,service,controller)to support authentication" />
     <MESSAGE value="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload" />
     <option name="LAST_COMMIT_MESSAGE" value="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload" />
   </component>

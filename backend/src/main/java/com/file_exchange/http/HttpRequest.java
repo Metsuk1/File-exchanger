@@ -5,8 +5,11 @@ import lombok.Getter;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class HttpRequest {
     private final String method;
     private final String path;
@@ -37,13 +40,12 @@ public class HttpRequest {
         return value != null ? Long.parseLong(value) : null;
     }
 
-    @Override
-    public String toString() {
-        return "com.example.homework_1.http.HttpRequest{" +
-                "method='" + method + '\'' +
-                ", path='" + path + '\'' +
-                ", headers=" + headers +
-                ", body='" + body + '\'' +
-                '}';
+    public TempFileInputStream getPartAsTempFile(String name) {
+        Object part = parts.get(name);
+        if (part instanceof TempFileInputStream) {
+            return (TempFileInputStream) part;
+        }
+        return null;
     }
+
 }

@@ -2,6 +2,7 @@ package com.file_exchange.controllers;
 
 import com.file_exchange.annotations.*;
 import com.file_exchange.entity.File;
+import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import com.file_exchange.services.FileService;
 import com.file_exchange.utils.JwtUtil;
 
@@ -20,15 +21,16 @@ public class FileController {
 
     @CustomPostMapping("/upload")
     public Map<String, Object> upload(@CustomRequestHeader("Authorization") String auth,
-                                      @CustomRequestPart("file") InputStream fileStream,
-                                      @CustomRequestPart("fileName") String name,
-                                      @CustomRequestPart("size") long size) {
+                                      @CustomRequestPart("file") TempFileInputStream filePart) {
 
 
         String token = auth.replace("Bearer ", "").trim();
         Long userId = Long.parseLong(JwtUtil.validateToken(token));
 
-        Long fileId = fileService.uploadFile(userId, fileStream, name, size);
+        String fileName = filePart.getOriginalFileName();
+        long size = filePart.getFileSize();
+
+        Long fileId = fileService.uploadFile(userId, filePart, fileName, size);
 
         return Map.of("status", "ok", "fileId", fileId);
     }
