@@ -107,10 +107,18 @@ public class CustomWebServer {
         writer.printf("Content-Type: %s\r\n", response.getContentType());
         writer.printf("Content-Length: %d\r\n", response.getBody().length);
         writer.printf("Connection: %s\r\n", keepAlive ? "keep-alive" : "close");
-        writer.println();
+
+        if (response.getHeaders() != null) {
+            for (Map.Entry<String, String> h : response.getHeaders().entrySet()) {
+                writer.printf("%s: %s\r\n", h.getKey(), h.getValue());
+            }
+        }
+        writer.print("\r\n");
         writer.flush();
-        out.write(response.getBody());
-        out.flush();
+        if (response.getBody() != null && response.getBody().length > 0) {
+            out.write(response.getBody());
+            out.flush();
+        }
     }
 
 

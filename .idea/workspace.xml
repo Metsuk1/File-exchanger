@@ -4,25 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e16da65-850a-44bd-a71e-facb4ddbdd8d" name="Changes" comment="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/utilsFiles/InputStreamRequestContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/utilsFiles/TempFileInputStream.java" afterDir="false" />
+    <list default="true" id="5e16da65-850a-44bd-a71e-facb4ddbdd8d" name="Changes" comment="Enhancement(backend):Implemented endpoint /upload">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/dto/FileDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/utilsFiles/MimeTypeUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/FileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/executor/CustomExecutorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/executor/CustomExecutorService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/HttpRequestParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/HttpRequestParser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/ParameterBinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/ParameterBinder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/ResponseConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/ResponseConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/Router.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/Router.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/http/HttpRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/http/HttpRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/server/CustomWebServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/server/CustomWebServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/http/HttpResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/http/HttpResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/FileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/FileService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/controllers/FileController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/controllers/FileController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/executor/CustomExecutorService$VirtualThreadPerTaskExecutor.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/executor/CustomExecutorService$VirtualThreadPerTaskExecutor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/executor/CustomExecutorService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/executor/CustomExecutorService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/HttpRequestParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/HttpRequestParser.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/ParameterBinder.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/ParameterBinder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/ResponseConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/ResponseConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/Router.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/Router.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/http/HttpRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/http/HttpRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/server/CustomWebServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/server/CustomWebServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/http/HttpResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/http/HttpResponse.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/services/FileService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/services/FileService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/test-classes/com/file_exchange/UserServiceTest.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/users.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -126,7 +129,9 @@
       <workItem from="1760691730946" duration="62000" />
       <workItem from="1760702395137" duration="372000" />
       <workItem from="1760706905704" duration="5030000" />
-      <workItem from="1760723115473" duration="3901000" />
+      <workItem from="1760723115473" duration="4281000" />
+      <workItem from="1760773275484" duration="2065000" />
+      <workItem from="1760808439378" duration="7160000" />
     </task>
     <task id="LOCAL-00002" summary="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload">
       <option name="closed" value="true" />
@@ -136,7 +141,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760636327887</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Enhancement(backend):Implemented endpoint /upload">
+      <option name="closed" value="true" />
+      <created>1760727239923</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1760727239923</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -144,6 +157,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload" />
-    <option name="LAST_COMMIT_MESSAGE" value="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload" />
+    <MESSAGE value="Enhancement(backend):Implemented endpoint /upload" />
+    <option name="LAST_COMMIT_MESSAGE" value="Enhancement(backend):Implemented endpoint /upload" />
   </component>
 </project>

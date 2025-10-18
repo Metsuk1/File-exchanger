@@ -3,6 +3,9 @@ package com.file_exchange.http;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
 @Setter
 public class HttpResponse {
@@ -10,6 +13,7 @@ public class HttpResponse {
     private String statusText;
     private String contentType;
     private byte[] body;
+    private Map<String, String> headers = new HashMap<>();
 
   public  static  HttpResponse ok(byte[] body, String type) {
         HttpResponse r = new HttpResponse();
@@ -18,6 +22,19 @@ public class HttpResponse {
         r.contentType = type;
         r.body = body;
         return r;
+    }
+
+    public static HttpResponse ok(byte[] body, String type,Map<String, String> headers) {
+        HttpResponse r = ok(body, type);
+        if (headers != null) {
+            r.headers.putAll(headers);
+        }
+        return r;
+    }
+
+    public HttpResponse withHeader(String name, String value) {
+        this.headers.put(name, value);
+        return this;
     }
 
     public static HttpResponse notFound() {

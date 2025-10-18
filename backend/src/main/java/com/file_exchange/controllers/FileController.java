@@ -1,6 +1,7 @@
 package com.file_exchange.controllers;
 
 import com.file_exchange.annotations.*;
+import com.file_exchange.dto.FileDto;
 import com.file_exchange.entity.File;
 import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import com.file_exchange.services.FileService;
@@ -44,8 +45,8 @@ public class FileController {
     }
 
     @CustomGetMapping("/download")
-    public InputStream download(@CustomRequestHeader("Authorization") String auth,
-                                @CustomRequestParam("fileId") Long fileId) {
+    public FileDto download(@CustomRequestHeader("Authorization") String auth,
+                            @CustomRequestParam("fileId") Long fileId) {
 
         String token = auth.replace("Bearer ", "").trim();
 

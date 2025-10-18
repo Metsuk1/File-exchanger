@@ -34,6 +34,9 @@ public class Router {
     }
 
     private String extractPathWithoutQuery(String rawPath) {
+        if (rawPath == null || rawPath.isEmpty()) {
+            return "/";
+        }
         return rawPath.contains("?") ? rawPath.substring(0, rawPath.indexOf("?")) : rawPath;
     }
 
@@ -49,6 +52,10 @@ public class Router {
         if (!requestMethod.equals(routeMethod)) {
             return false;
         }
+
+        if (requestPath.isEmpty()) requestPath = "/";
+        if (routePath.isEmpty()) routePath = "/";
+
         String[] requestParts = requestPath.split("/");
         String[] routeParts = routePath.split("/");
         if (requestParts.length != routeParts.length) {
