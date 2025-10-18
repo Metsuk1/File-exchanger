@@ -73,7 +73,9 @@ public class HttpRequestParser {
         if (parts.length < 2) return null;
 
         String method = parts[0].toUpperCase();
-        String path = parts[1];
+        String fullPath = parts[1];
+        String path = fullPath.split("\\?")[0];
+        Map<String, String> queryParam = parseQueryParams(fullPath);
 
         //Parse all other header lines into a Map
         Map<String, String> headers = new HashMap<>();
@@ -92,11 +94,12 @@ public class HttpRequestParser {
             Check if the request is multipart/form-data (file upload)
         */
         if (isMultipart(headers)) {
-            return parseMultipartStreaming(bufferedStream, method, path, headers);
+            return parseMultipartStreaming(bufferedStream, method, fullPath, headers);
         } else {
             // Otherwise, parse it as a normal text body
             String body = parseTextBody(bufferedStream, method, headers);
-            return new HttpRequest(method, path, headers, body, new HashMap<>());
+            // return new HttpRequest(method, fullPath, headers, body, new HashMap<>(),queryParam);
+            return new HttpRequest(method, path, headers, body, new HashMap<>(),queryParam);
         }
     }
 
@@ -159,7 +162,7 @@ public class HttpRequestParser {
         }
 
         // Return a constructed HttpRequest object with parsed form data
-        return new HttpRequest(method, path, headers, "", parts);
+        return new HttpRequest(method, path, headers, "", parts,new HashMap<>());
     }
 
     /**
@@ -200,6 +203,21 @@ public class HttpRequestParser {
         if (contentType == null) return null;
         int idx = contentType.indexOf("boundary=");
         return (idx != -1) ? contentType.substring(idx + 9).trim() : null;
+    }
+
+    private Map<String, String> parseQueryParams(String fullPath) {
+        Map<String, String> queryParams = new HashMap<>();
+        int questionIndex = fullPath.indexOf("?");
+        if (questionIndex != -1 && questionIndex < fullPath.length() - 1) {
+            String query = fullPath.substring(questionIndex + 1);
+            for (String pair : query.split("&")) {
+                String[] kv = pair.split("=", 2);
+                if (kv.length == 2) {
+                    queryParams.put(kv[0], kv[1]);
+                }
+            }
+        }
+        return queryParams;
     }
 
 }

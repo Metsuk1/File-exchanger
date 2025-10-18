@@ -16,14 +16,17 @@ public class HttpRequest {
     private final Map<String, String> headers;
     private final String body;
     private final Map<String, Object> parts;//for multipart -  parts
+    private final Map<String, String> queryParams;
 
-    public HttpRequest(String method, String path, Map<String, String> headers, String body, Map<String, Object> parts) {
+    public HttpRequest(String method, String path, Map<String, String> headers, String body, Map<String, Object> parts,Map<String, String> queryParams) {
         this.method = method;
         this.path = path;
         this.headers = headers;
         this.body = body;
         this.parts = parts != null ? parts : new HashMap<>();
+        this.queryParams = queryParams;
     }
+
 
     public InputStream getPartAsStream(String partName) {
         Object part = parts.get(partName);

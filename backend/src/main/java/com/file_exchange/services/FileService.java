@@ -1,5 +1,7 @@
 package com.file_exchange.services;
 
+import com.file_exchange.dto.FileDto;
+import com.file_exchange.handlers.utilsFiles.MimeTypeUtils;
 import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import com.file_exchange.repository.FileRepository;
 
@@ -67,13 +69,26 @@ public class FileService {
         return fileRepository.getUserFiles(userId);
     }
 
-    public InputStream getUserFile(Long userId, Long fileId) {
+    public FileDto getUserFile(Long userId, Long fileId) {
         File file = fileRepository.getFileById(fileId, userId);
         if (file == null) {
             throw new IllegalArgumentException("File not found");
         }
         try {
-            return new FileInputStream(file.getFilePath());
+            InputStream is = new FileInputStream(file.getFilePath());
+            String contentType = null;
+
+            try {
+                contentType = Files.probeContentType(Paths.get(file.getFilePath()));
+            }catch (Exception ignore) {
+                // ignore,because there is no need to handle error and print it
+            }
+
+            if (contentType == null || contentType.isBlank()) {
+                contentType = MimeTypeUtils.detect(file.getFileName());
+            }
+
+            return new FileDto(file.getFileName(),contentType,is);
         } catch (FileNotFoundException e) {
             throw new RuntimeException("File not found", e);
         }
