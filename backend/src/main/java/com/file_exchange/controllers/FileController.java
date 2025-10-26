@@ -25,8 +25,7 @@ public class FileController {
                                       @CustomRequestPart("file") TempFileInputStream filePart) {
 
 
-        String token = auth.replace("Bearer ", "").trim();
-        Long userId = Long.parseLong(JwtUtil.validateToken(token));
+        Long userId = extractUserId(auth);
 
         String fileName = filePart.getOriginalFileName();
         long size = filePart.getFileSize();
@@ -38,8 +37,7 @@ public class FileController {
 
     @CustomGetMapping
     public List<File> list(@CustomRequestHeader("Authorization") String auth) {
-        String token = auth.replace("Bearer ", "").trim();
-        Long userId = Long.parseLong(JwtUtil.validateToken(token));
+        Long userId = extractUserId(auth);
 
         return fileService.getUserFiles(userId);
     }
@@ -48,9 +46,35 @@ public class FileController {
     public FileDto download(@CustomRequestHeader("Authorization") String auth,
                             @CustomRequestParam("fileId") Long fileId) {
 
-        String token = auth.replace("Bearer ", "").trim();
+        Long userId = extractUserId(auth);
 
-        Long userId = Long.parseLong(JwtUtil.validateToken(token));
         return fileService.getUserFile(userId, fileId);
     }
+
+    @CustomDeleteMapping
+    public Map<String,Object> deleteFile(@CustomRequestHeader("Authorization") String auth,
+                                         @CustomRequestParam("fileId") Long fileId){
+
+        Long userId = extractUserId(auth);
+
+        fileService.deleteFile(userId,fileId);
+
+        return Map.of("status", "deleted", "fileId", fileId);
+    }
+
+    private Long extractUserId(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Missing or invalid Authorization header");
+        }
+
+        String token = authHeader.substring(7).trim();
+        String userIdStr = JwtUtil.validateToken(token);
+
+        try {
+            return Long.parseLong(userIdStr);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid user ID in token");
+        }
+    }
+
 }
