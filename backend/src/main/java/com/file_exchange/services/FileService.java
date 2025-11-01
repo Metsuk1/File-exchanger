@@ -5,10 +5,7 @@ import com.file_exchange.handlers.utilsFiles.MimeTypeUtils;
 import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import com.file_exchange.repository.FileRepository;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -92,7 +89,38 @@ public class FileService {
         } catch (FileNotFoundException e) {
             throw new RuntimeException("File not found", e);
         }
+    }
 
+    public void deleteFile(Long userId, Long fileId) {
+        File file = fileRepository.getFileById(fileId, userId);
+        if(file == null) {
+            throw new IllegalArgumentException("File not found");
+        }
+
+       Path path = Paths.get(file.getFilePath());
+
+       try{
+           if(Files.exists(path)){
+              try{
+                  Files.delete(path);
+              }catch (java.nio.file.FileSystemException ex) {
+                  try {
+                      Thread.sleep(50);
+                  } catch (InterruptedException ignored) {
+                      // ignored for quick replay if the file was just used
+                  }
+                  Files.delete(path);
+              }
+           }
+       } catch (IOException e) {
+           throw new RuntimeException("Failed to delete file: " + e.getMessage(), e);
+       }
+        fileRepository.deleteFile(fileId,userId);
+    }
+
+    public String getFilePath(Long userId, Long fileId) {
+        File file = fileRepository.getFileById(fileId, userId);
+        return file != null ? file.getFilePath() : null;
     }
 
     private String sanitizeFileName(String fileName) {

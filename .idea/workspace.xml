@@ -4,27 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e16da65-850a-44bd-a71e-facb4ddbdd8d" name="Changes" comment="Enhancement(backend):Implemented endpoint /upload">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/dto/FileDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/utilsFiles/MimeTypeUtils.java" afterDir="false" />
+    <list default="true" id="5e16da65-850a-44bd-a71e-facb4ddbdd8d" name="Changes" comment="Enhancement(backend):Implemented endpoint /download">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/FileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/HttpRequestParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/HttpRequestParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/ParameterBinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/ParameterBinder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/ResponseConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/ResponseConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/Router.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/Router.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/http/HttpRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/http/HttpRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/http/HttpResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/http/HttpResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/entity/File.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/entity/File.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/repository/FileRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/repository/FileRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/FileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/FileService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/controllers/FileController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/controllers/FileController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/executor/CustomExecutorService$VirtualThreadPerTaskExecutor.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/executor/CustomExecutorService$VirtualThreadPerTaskExecutor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/executor/CustomExecutorService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/executor/CustomExecutorService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/HttpRequestParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/HttpRequestParser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/ParameterBinder.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/ParameterBinder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/ResponseConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/ResponseConverter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/Router.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/dispatcher/Router.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/http/HttpRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/http/HttpRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/http/HttpResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/http/HttpResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/entity/File.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/entity/File.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/repository/FileRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/repository/FileRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/server/CustomWebServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/server/CustomWebServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/services/FileService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/services/FileService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/users.db" afterDir="false" />
     </list>
@@ -43,6 +32,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Metsuk1&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Metsuk1/File-exchanger&quot;,
+    &quot;accountId&quot;: &quot;723e6cd7-d2dd-4fd5-8219-d35cf06e76e8&quot;
+  }
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -57,6 +58,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Application.ExecutorServiceTest.executor&quot;: &quot;Run&quot;,
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.CustomExecutorServiceTest.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -71,6 +73,19 @@
   }
 }</component>
   <component name="RunManager" selected="Application.Main">
+    <configuration name="ExecutorServiceTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.file_exchange.executor.ExecutorServiceTest" />
+      <module name="file_exchange" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.file_exchange.executor.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.file_exchange.cli.Main" />
       <module name="file_exchange" />
@@ -102,6 +117,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.ExecutorServiceTest" />
         <item itemvalue="JUnit.CustomExecutorServiceTest" />
       </list>
     </recent_temporary>
@@ -131,7 +147,16 @@
       <workItem from="1760706905704" duration="5030000" />
       <workItem from="1760723115473" duration="4281000" />
       <workItem from="1760773275484" duration="2065000" />
-      <workItem from="1760808439378" duration="7160000" />
+      <workItem from="1760808439378" duration="7691000" />
+      <workItem from="1760867709733" duration="819000" />
+      <workItem from="1760875692719" duration="2484000" />
+      <workItem from="1761118935462" duration="3000" />
+      <workItem from="1761120067424" duration="514000" />
+      <workItem from="1761137761393" duration="31000" />
+      <workItem from="1761138664943" duration="5000" />
+      <workItem from="1761139127976" duration="4000" />
+      <workItem from="1761384765719" duration="19000" />
+      <workItem from="1761483902574" duration="2953000" />
     </task>
     <task id="LOCAL-00002" summary="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload">
       <option name="closed" value="true" />
@@ -149,7 +174,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760727239923</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Enhancement(backend):Implemented endpoint /download">
+      <option name="closed" value="true" />
+      <created>1760815950234</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1760815950234</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -158,6 +191,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload" />
     <MESSAGE value="Enhancement(backend):Implemented endpoint /upload" />
-    <option name="LAST_COMMIT_MESSAGE" value="Enhancement(backend):Implemented endpoint /upload" />
+    <MESSAGE value="Enhancement(backend):Implemented endpoint /download" />
+    <option name="LAST_COMMIT_MESSAGE" value="Enhancement(backend):Implemented endpoint /download" />
   </component>
 </project>

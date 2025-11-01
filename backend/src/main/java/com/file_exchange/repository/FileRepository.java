@@ -81,4 +81,15 @@ public class FileRepository {
             throw new RuntimeException("Failed to get file", e);
         }
     }
+
+    public void deleteFile(Long fileId, Long userId) {
+        try (PreparedStatement stmt = conn.prepareStatement(
+                "DELETE FROM files WHERE id = ? AND user_id = ?")) {
+            stmt.setLong(1, fileId);
+            stmt.setLong(2, userId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to delete file", e);
+        }
+    }
 }
