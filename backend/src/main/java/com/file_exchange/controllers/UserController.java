@@ -22,10 +22,10 @@ public class UserController {
     }
 
     @CustomPostMapping("/login")
-    public Map<String, String> login(@CustomRequestParam("email") String email,
-                                     @CustomRequestParam("password") String password) {
-
-        String token = userService.login(email, password);
-        return Map.of("token", token);
+    public String login(@CustomRequestBody UserDto dto) {
+        System.out.println("Login request: email=" + dto.getEmail() + ", password=" + dto.getPassword());
+        String token = userService.login(dto.getEmail(), dto.getPassword());
+        System.out.println("Token generated: " + token);
+        return token;
     }
 }
