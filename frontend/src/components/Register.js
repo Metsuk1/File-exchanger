@@ -14,10 +14,10 @@ function Register() {
         setError('');
         try {
             await register(name, email, password);
-            alert('Регистрация успешна! Войдите.');
+            alert('Registration successful! Sign in.');
             navigate('/login');
         } catch (err) {
-            setError(err.response?.data || 'Error register');
+            setError(err.response?.data || 'Registration error');
         }
     };
 
@@ -51,7 +51,7 @@ function Register() {
                     <button type="submit" className="btn-primary">Register</button>
                 </form>
                 <p className="auth-link">
-                    Already have a account? <a href="/login">Log in</a>
+                    Already have an account? <a href="/login">Log in</a>
                 </p>
             </div>
         </div>

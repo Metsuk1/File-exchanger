@@ -17,15 +17,13 @@ public class UserController {
     }
 
     @CustomPostMapping("/register")
-    public UserDto register(@CustomRequestBody UserDto dto, @CustomRequestParam("password") String password) {
-        return userService.register(dto, password);
+    public UserDto register(@CustomRequestBody UserDto dto) {
+        return userService.register(dto, dto.getPassword());
     }
 
     @CustomPostMapping("/login")
     public String login(@CustomRequestBody UserDto dto) {
-        System.out.println("Login request: email=" + dto.getEmail() + ", password=" + dto.getPassword());
         String token = userService.login(dto.getEmail(), dto.getPassword());
-        System.out.println("Token generated: " + token);
         return token;
     }
 }

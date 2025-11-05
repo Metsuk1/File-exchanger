@@ -4,7 +4,6 @@ export const api = axios.create({
     baseURL: '/api/v1'
 });
 
-// Интерцептор — оставь ОДИН!
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -13,24 +12,22 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-// ЛОГИН
+// login
 export const login = async (email, password) => {
     const response = await axios.post('/api/v1/users/login', { email, password });
     localStorage.setItem('token', response.data);
     return response;
 };
 
-// РЕГИСТРАЦИЯ — ОДИН РАЗ!
+// register
 export const register = async (name, email, password) => {
     const response = await axios.post('/api/v1/users/register', {
         name, email, password
-    }, {
-        headers: { 'Content-Type': 'application/json' }
     });
     return response;
 };
 
-// ФАЙЛЫ
+// files
 export const getFiles = () => api.get('/files');
 
 export const uploadFile = (file) => {

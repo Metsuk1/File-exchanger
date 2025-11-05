@@ -24,6 +24,7 @@ public class UserRepository {
             stmt.setString(1,userDto.getName());
             stmt.setString(2,userDto.getEmail());
             stmt.setString(3,password);
+            userDto.setPassword(password);
             stmt.executeUpdate();
 
             try (ResultSet rs = stmt.getGeneratedKeys()){
@@ -37,7 +38,7 @@ public class UserRepository {
             return userDto;
         } catch (SQLException e) {
             try {
-                conn.rollback(); // Откат при ошибке
+                conn.rollback();
             } catch (SQLException rollbackEx) {
                 rollbackEx.printStackTrace();
             }

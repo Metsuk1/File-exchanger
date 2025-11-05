@@ -79,10 +79,10 @@ function FileList() {
                             </div>
                             <div className="file-actions">
                                 <button onClick={() => handleDownload(file.id, file.fileName)} className="btn-small">
-                                    Скачать
+                                    Download
                                 </button>
                                 <button onClick={() => handleDelete(file.id)} className="btn-danger">
-                                    Удалить
+                                    Delete
                                 </button>
                             </div>
                         </li>
