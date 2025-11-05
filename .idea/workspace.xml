@@ -4,17 +4,74 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e16da65-850a-44bd-a71e-facb4ddbdd8d" name="Changes" comment="Enhancement(backend):Implemented endpoint /download">
+    <list default="true" id="5e16da65-850a-44bd-a71e-facb4ddbdd8d" name="Changes" comment="Enhancement(backend):Removed static">
+      <change afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/dto/FileDto.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/handlers/utilsFiles/MimeTypeUtils.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/.idea/frontend.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/public/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/public/logo192.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/public/logo512.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/public/manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/public/robots.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/App.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/FileList.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Layout.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Login.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Register.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/logo.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/FilesPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/LoginPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/RegisterPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/reportWebVitals.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/services/api.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/setupTests.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/styles/App.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/styles/components.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uploads/1/Lecture_6-Disjoint_sets_MST.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uploads/1/screenshot_2025-10-03_17-13-05.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uploads/1/test.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uploads/2/Algorithms_hw-0.1.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uploads/3/bmw_e38_740il_106113_1600x900.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uploads/3/screenshot_2025-10-03_17-13-05.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/FileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/entity/File.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/entity/File.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/repository/FileRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/repository/FileRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/FileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/FileService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/controllers/FileController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/controllers/FileController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/entity/File.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/entity/File.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/repository/FileRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/repository/FileRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/server/CustomWebServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/server/CustomWebServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/services/FileService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/services/FileService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/controllers/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/RequestDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/RequestDispatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/handlers/dispatcher/StaticFileServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/server/CustomWebServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/server/CustomWebServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/static/images/photo1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/static/images/photo2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/static/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/file_exchange/CustomWebServerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/file_exchange/UserServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/controllers/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/controllers/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/services/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/services/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/file_exchange-0.0.1-SNAPSHOT-jar-with-dependencies.jar" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/file_exchange-0.0.1-SNAPSHOT-jar-with-dependencies.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/file_exchange-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/file_exchange-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/surefire-reports/TEST-com.file_exchange.CustomExecutorServiceTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/surefire-reports/TEST-com.file_exchange.CustomExecutorServiceTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/surefire-reports/TEST-com.file_exchange.CustomWebServerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/surefire-reports/TEST-com.file_exchange.UserServiceTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/surefire-reports/com.file_exchange.CustomExecutorServiceTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/surefire-reports/com.file_exchange.CustomExecutorServiceTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/surefire-reports/com.file_exchange.CustomWebServerTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/surefire-reports/com.file_exchange.UserServiceTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/test-classes/com/file_exchange/CustomWebServerTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Dockerfile" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/users.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -61,10 +118,12 @@
     &quot;Application.ExecutorServiceTest.executor&quot;: &quot;Run&quot;,
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.CustomExecutorServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CustomWebServerTest.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/final_project/File-exchanger&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
@@ -114,11 +173,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="CustomWebServerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="file_exchange" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.file_exchange.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.file_exchange" />
+      <option name="MAIN_CLASS_NAME" value="com.file_exchange.CustomWebServerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
-        <item itemvalue="Application.ExecutorServiceTest" />
+        <item itemvalue="JUnit.CustomWebServerTest" />
         <item itemvalue="JUnit.CustomExecutorServiceTest" />
+        <item itemvalue="Application.ExecutorServiceTest" />
       </list>
     </recent_temporary>
   </component>
@@ -156,7 +231,22 @@
       <workItem from="1761138664943" duration="5000" />
       <workItem from="1761139127976" duration="4000" />
       <workItem from="1761384765719" duration="19000" />
-      <workItem from="1761483902574" duration="2953000" />
+      <workItem from="1761483902574" duration="4223000" />
+      <workItem from="1761503555694" duration="30000" />
+      <workItem from="1761503847264" duration="429000" />
+      <workItem from="1761504287520" duration="8000" />
+      <workItem from="1761558503305" duration="24000" />
+      <workItem from="1761746052489" duration="20000" />
+      <workItem from="1761919273899" duration="2289000" />
+      <workItem from="1761924993733" duration="5485000" />
+      <workItem from="1761931712411" duration="710000" />
+      <workItem from="1761932486737" duration="1449000" />
+      <workItem from="1761980506452" duration="10000" />
+      <workItem from="1762169567280" duration="1000" />
+      <workItem from="1762178157717" duration="83000" />
+      <workItem from="1762178247156" duration="1625000" />
+      <workItem from="1762277938156" duration="42000" />
+      <workItem from="1762358571442" duration="303000" />
     </task>
     <task id="LOCAL-00002" summary="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload">
       <option name="closed" value="true" />
@@ -182,7 +272,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760815950234</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Enhancement(backend):Implemented endpoint /delete">
+      <option name="closed" value="true" />
+      <created>1761487256786</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1761487256786</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -192,6 +290,8 @@
     <MESSAGE value="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload" />
     <MESSAGE value="Enhancement(backend):Implemented endpoint /upload" />
     <MESSAGE value="Enhancement(backend):Implemented endpoint /download" />
-    <option name="LAST_COMMIT_MESSAGE" value="Enhancement(backend):Implemented endpoint /download" />
+    <MESSAGE value="Enhancement(backend):Implemented endpoint /delete" />
+    <MESSAGE value="Enhancement(backend):Removed static" />
+    <option name="LAST_COMMIT_MESSAGE" value="Enhancement(backend):Removed static" />
   </component>
 </project>

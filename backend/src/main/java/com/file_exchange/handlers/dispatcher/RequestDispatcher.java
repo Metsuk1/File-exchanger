@@ -16,25 +16,16 @@ public class RequestDispatcher {
     private final Router router;
     private final ParameterBinder parameterBinder;
     private final ResponseConverter responseConverter;
-    private final StaticFileServer staticFileServer;
 
-    public RequestDispatcher(Map<String, HandlerMethod> routeHandlers, ObjectMapper objectMapper, String staticResourcesPath) {
+    public RequestDispatcher(Map<String, HandlerMethod> routeHandlers, ObjectMapper objectMapper) {
         this.router = new Router(routeHandlers);
         this.parameterBinder = new ParameterBinder(objectMapper);
         this.responseConverter = new ResponseConverter(objectMapper);
-        this.staticFileServer = new StaticFileServer(staticResourcesPath);
     }
 
     @SneakyThrows
     public HttpResponse handleRequest(HttpRequest request) {
         try {
-            // Check for static resources first
-            if ("GET".equals(request.getMethod())) {
-                HttpResponse staticResponse = staticFileServer.serve(request.getPath());
-                if (staticResponse != null) {
-                    return staticResponse;
-                }
-            }
             // Find matching handler
             HandlerMethod handler = router.findHandler(request.getMethod(), request.getPath());
             if (handler == null) {

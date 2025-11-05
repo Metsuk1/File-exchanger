@@ -1,4 +1,2 @@
-com\file_exchange\HttpResponseData.class
 com\file_exchange\CustomExecutorServiceTest.class
-com\file_exchange\CustomWebServerTest.class
-com\file_exchange\UserServiceTest.class
+com\file_exchange\HttpResponseData.class

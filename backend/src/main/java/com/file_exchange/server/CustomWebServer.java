@@ -34,7 +34,7 @@ public class CustomWebServer {
                 ? CustomExecutorService.newVirtualThreadPool(threadPoolSize)
                 : CustomExecutorService.newPlatformThreadPool(threadPoolSize);
         this.requestParser = new HttpRequestParser();
-        this.requestDispatcher = new RequestDispatcher(routeHandlers, objectMapper, "backend/src/main/resources/static");
+        this.requestDispatcher = new RequestDispatcher(routeHandlers, objectMapper);
         this.running = false;
     }
 

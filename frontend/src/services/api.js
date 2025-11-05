@@ -1,0 +1,50 @@
+import axios from 'axios';
+
+export const api = axios.create({
+    baseURL: '/api/v1'
+});
+
+// Интерцептор — оставь ОДИН!
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+// ЛОГИН
+export const login = async (email, password) => {
+    const response = await axios.post('/api/v1/users/login', { email, password });
+    localStorage.setItem('token', response.data);
+    return response;
+};
+
+// РЕГИСТРАЦИЯ — ОДИН РАЗ!
+export const register = async (name, email, password) => {
+    const response = await axios.post('/api/v1/users/register', {
+        name, email, password
+    }, {
+        headers: { 'Content-Type': 'application/json' }
+    });
+    return response;
+};
+
+// ФАЙЛЫ
+export const getFiles = () => api.get('/files');
+
+export const uploadFile = (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('fileName', file.name);
+    formData.append('size', file.size);
+    return api.post('/files/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+};
+
+export const downloadFile = (fileId) =>
+    api.get(`/files/download?fileId=${fileId}`, { responseType: 'blob' });
+
+export const deleteFile = (fileId) =>
+    api.delete(`/files?fileId=${fileId}`);
