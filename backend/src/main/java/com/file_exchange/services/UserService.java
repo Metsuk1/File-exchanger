@@ -22,20 +22,15 @@ public class UserService {
     }
 
     public String login(String email, String password) {
-        System.out.println("Login attempt: " + email + " with password: " + password);
         UserDto user = userRepository.findUserByEmail(email);
         if (user == null) {
-            System.out.println("User not found in DB");
             throw new IllegalArgumentException("user null");
         }
-        System.out.println("User found: " + user.getId() + ", " + user.getEmail());
         if(!user.getPassword().equals(password)){
-            System.out.println("Password mismatch");
             throw new IllegalArgumentException("Invalid password");
         }
 
         String token = JwtUtil.generateToken(user.getId());
-        System.out.println("Token generated: " + token);
         return token;
     }
 }

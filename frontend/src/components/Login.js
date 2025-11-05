@@ -11,21 +11,37 @@ function Login() {
         e.preventDefault();
         try {
             await login(email, password);
-            navigate('/files');
+            window.location.href = '/files';
         } catch (error) {
-            console.error('Login error:', error);
-            alert('Login failed. Check console.');
+            alert('Error to login: ' + (error.response?.data || 'Check console'));
         }
     };
 
     return (
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-                <button type="submit">Login</button>
-            </form>
+        <div className="auth-container">
+            <div className="auth-card">
+                <h2>Log in</h2>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <input
+                        type="password"
+                        placeholder="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <button type="submit" className="btn-primary">Log in</button>
+                </form>
+                <p className="auth-link">
+                    No account? <a href="/register">Register</a>
+                </p>
+            </div>
         </div>
     );
 }
