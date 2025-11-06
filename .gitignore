@@ -1,1 +1,10 @@
 /.idea
+
+#secrets
+.env
+*.env
+
+
+#db and files
+users.db
+uploads/

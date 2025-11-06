@@ -9,11 +9,21 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public class JwtUtil {
-    private static final String SECRET_KEY =
-            System.getenv("JWT_SECRET") != null
-                    ? System.getenv("JWT_SECRET")
-                    : "super-secret-key-for-dev-mode-123456789012345678901234567890";
-    private static final long EXPIRATION_TIME = 86400000; // 24 hours
+    private static final String SECRET_KEY = getSecretKey();
+    private static final long EXPIRATION_TIME = 86400000L; // 24 hours
+
+    private static String getSecretKey() {
+        String key = System.getenv("JWT_SECRET");
+        if (key == null || key.trim().isEmpty()) {
+            throw new IllegalStateException(
+                    "SECURITY ERROR: JWT_SECRET not found! "
+            );
+        }
+        if (key.length() < 32) {
+            throw new IllegalArgumentException("JWT_SECRET is too short! Minimum 32 characters for HS256.");
+        }
+        return key.trim();
+    }
 
     public static String generateToken(Long userId) {
         SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
