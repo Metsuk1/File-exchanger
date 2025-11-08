@@ -4,21 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e16da65-850a-44bd-a71e-facb4ddbdd8d" name="Changes" comment="refactor(backend - frontend):fixed bug with login(password was null) and frontend also works">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nginx.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/ci.yml" afterDir="false" />
+    <list default="true" id="5e16da65-850a-44bd-a71e-facb4ddbdd8d" name="Changes" comment="Enhancement:provide docker-compose,DockerFiles and nginx">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/utils/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/utils/JwtUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Layout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/styles/components.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/components.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/users.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/cli/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/file_exchange/cli/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/cli/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/cli/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/utils/JwtUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/file_exchange/utils/JwtUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/file_exchange-0.0.1-SNAPSHOT-jar-with-dependencies.jar" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/file_exchange-0.0.1-SNAPSHOT-jar-with-dependencies.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/file_exchange-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/file_exchange-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/surefire-reports/TEST-com.file_exchange.CustomExecutorServiceTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/surefire-reports/TEST-com.file_exchange.CustomExecutorServiceTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/surefire-reports/com.file_exchange.CustomExecutorServiceTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/surefire-reports/com.file_exchange.CustomExecutorServiceTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/nginx.conf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,27 +61,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.ExecutorServiceTest.executor": "Run",
-    "Application.Main.executor": "Run",
-    "JUnit.CustomExecutorServiceTest.executor": "Run",
-    "JUnit.CustomWebServerTest.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "dev",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/final_project/File-exchanger",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.ExecutorServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CustomExecutorServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CustomWebServerTest.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/final_project/File-exchanger&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="ExecutorServiceTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.file_exchange.executor.ExecutorServiceTest" />
@@ -96,6 +98,9 @@
       </method>
     </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <envs>
+        <env name="JWT_SECRET" value="super-secret-key-for-dev-mode-123456789012345678901234567890" />
+      </envs>
       <option name="MAIN_CLASS_NAME" value="com.file_exchange.cli.Main" />
       <module name="file_exchange" />
       <extension name="coverage">
@@ -103,6 +108,16 @@
           <option name="PATTERN" value="com.file_exchange.cli.*" />
           <option name="ENABLED" value="true" />
         </pattern>
+      </extension>
+      <extension name="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
       </extension>
       <method v="2">
         <option name="Make" enabled="true" />
@@ -138,6 +153,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.ExecutorServiceTest" />
+      <item itemvalue="Application.Main" />
+      <item itemvalue="JUnit.CustomExecutorServiceTest" />
+      <item itemvalue="JUnit.CustomWebServerTest" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
@@ -200,7 +221,13 @@
       <workItem from="1762441034222" duration="1095000" />
       <workItem from="1762442143646" duration="678000" />
       <workItem from="1762442834012" duration="46000" />
-      <workItem from="1762442887158" duration="1069000" />
+      <workItem from="1762442887158" duration="3933000" />
+      <workItem from="1762446859171" duration="4801000" />
+      <workItem from="1762531475925" duration="250000" />
+      <workItem from="1762532156797" duration="4000" />
+      <workItem from="1762534142798" duration="8000" />
+      <workItem from="1762534820427" duration="3000" />
+      <workItem from="1762617083512" duration="5608000" />
     </task>
     <task id="LOCAL-00002" summary="Enhancement(backend):Implemented endpoint /register /login but i have some issues with /upload">
       <option name="closed" value="true" />
@@ -250,7 +277,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762362335244</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Enhancement:provide docker-compose,DockerFiles and nginx">
+      <option name="closed" value="true" />
+      <created>1762444022877</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1762444022877</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -263,6 +298,7 @@
     <MESSAGE value="Enhancement(backend):Implemented endpoint /delete" />
     <MESSAGE value="Enhancement(backend):Removed static" />
     <MESSAGE value="refactor(backend - frontend):fixed bug with login(password was null) and frontend also works" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor(backend - frontend):fixed bug with login(password was null) and frontend also works" />
+    <MESSAGE value="Enhancement:provide docker-compose,DockerFiles and nginx" />
+    <option name="LAST_COMMIT_MESSAGE" value="Enhancement:provide docker-compose,DockerFiles and nginx" />
   </component>
 </project>

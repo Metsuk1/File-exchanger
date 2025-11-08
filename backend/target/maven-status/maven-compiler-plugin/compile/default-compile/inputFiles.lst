@@ -22,7 +22,6 @@ C:\final_project\File-exchanger\backend\src\main\java\com\file_exchange\entity\F
 C:\final_project\File-exchanger\backend\src\main\java\com\file_exchange\dto\FileDto.java
 C:\final_project\File-exchanger\backend\src\main\java\com\file_exchange\annotations\CustomPostMapping.java
 C:\final_project\File-exchanger\backend\src\main\java\com\file_exchange\services\UserService.java
-C:\final_project\File-exchanger\backend\src\main\java\com\file_exchange\handlers\dispatcher\StaticFileServer.java
 C:\final_project\File-exchanger\backend\src\main\java\com\file_exchange\annotations\CustomRequestParam.java
 C:\final_project\File-exchanger\backend\src\main\java\com\file_exchange\db\DatabaseInitializer.java
 C:\final_project\File-exchanger\backend\src\main\java\com\file_exchange\annotations\CustomDeleteMapping.java

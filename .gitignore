@@ -1,10 +1,29 @@
-/.idea
-
-#secrets
+# Environment
 .env
 *.env
 
+# Backend
+backend/target/
+backend/.idea/
+backend/*.iml
 
-#db and files
-users.db
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/.env.local
+
+# Database & uploads
+*.db
+*.db-journal
 uploads/
+
+# IDE
+.vscode/
+.idea/
+
+# Docker
+.dockerignore
+
+# System
+.DS_Store
+Thumbs.db

@@ -32,9 +32,16 @@ public class Main {
 
             virtualServer.start();
             System.out.println("CustomWebServer started on http://localhost:8080");
-            System.out.println("Press Enter to stop...");
-            System.in.read();
-            virtualServer.stop();
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                System.out.println("Shutting down server...");
+                virtualServer.stop();
+            }));
+            System.out.println("Server is running. Press Ctrl+C to stop.");
+            Thread.currentThread().join();
+        }catch (InterruptedException e) {
+            System.out.println("Server interrupted");
+            Thread.currentThread().interrupt();
         } catch (Exception e) {
             System.out.println("CustomWebServer stopped with errors: " + e.getMessage());
             e.printStackTrace();
