@@ -33,7 +33,6 @@ com\file_exchange\annotations\CustomPutMapping.class
 com\file_exchange\repository\FileRepository.class
 com\file_exchange\handlers\utilsFiles\InputStreamRequestContext.class
 com\file_exchange\services\UserService.class
-com\file_exchange\handlers\dispatcher\StaticFileServer.class
 com\file_exchange\annotations\CustomRequestPart.class
 com\file_exchange\dto\FileDto.class
 com\file_exchange\entity\User.class
