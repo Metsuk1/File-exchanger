@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { login } from '../services/api';
-import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
