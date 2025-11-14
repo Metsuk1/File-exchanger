@@ -3,7 +3,7 @@
 **File-Exchanger** is a modern, secure, and fast file-sharing web application built with **Java (backend)**, **React (frontend)**, **Nginx**, and **Docker**.  
 It allows users to **upload, download, and manage files** with **JWT-based authentication**, **SQLite database**, and **production-ready architecture**.
 
-Live demo: http://85.198.88.69/login
+Live demo: http://85.198.88.69
 
 ---
 
