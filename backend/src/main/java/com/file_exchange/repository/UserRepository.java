@@ -3,6 +3,9 @@ package com.file_exchange.repository;
 import com.file_exchange.dto.UserDto;
 import java.sql.*;
 
+/**
+ * Database operations for User entity
+ */
 public class UserRepository {
     private final Connection conn;
 
@@ -14,13 +17,16 @@ public class UserRepository {
         }
     }
 
-    public UserDto createUser(UserDto userDto, String password) {
+    public boolean existsByEmail(String email) {
+        return findUserByEmail(email) != null;
+    }
+
+    public UserDto save(UserDto userDto, String hashedPassword) {
         try (PreparedStatement stmt = conn.prepareStatement(
                 "INSERT INTO users (name,email,password) VALUES (?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, userDto.getName());
             stmt.setString(2, userDto.getEmail());
-            stmt.setString(3, password);
-            userDto.setPassword(password);
+            stmt.setString(3, hashedPassword);
             stmt.executeUpdate();
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
@@ -28,8 +34,6 @@ public class UserRepository {
                     userDto.setId(rs.getLong(1));
                 }
             }
-
-            userDto.setPassword(password);
 
             return userDto;
         } catch (SQLException e) {
