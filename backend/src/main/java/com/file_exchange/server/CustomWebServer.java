@@ -1,5 +1,6 @@
 package com.file_exchange.server;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.file_exchange.annotations.*;
 import com.file_exchange.executor.CustomExecutorService;
 import com.file_exchange.handlers.HandlerMethod;
@@ -7,15 +8,13 @@ import com.file_exchange.handlers.dispatcher.HttpRequestParser;
 import com.file_exchange.handlers.dispatcher.RequestDispatcher;
 import com.file_exchange.http.HttpRequest;
 import com.file_exchange.http.HttpResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
-
 import java.io.*;
 import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.SneakyThrows;
 
 public class CustomWebServer {
     private final int port;
@@ -57,13 +56,11 @@ public class CustomWebServer {
         }
     }
 
-
-
     @SneakyThrows
     private void handleClient(Socket clientSocket) {
         boolean keepAlive = true;
         try (InputStream in = clientSocket.getInputStream();
-             OutputStream out = clientSocket.getOutputStream()) {
+                OutputStream out = clientSocket.getOutputStream()) {
 
             clientSocket.setSoTimeout(30000);
 
@@ -75,8 +72,8 @@ public class CustomWebServer {
                 requestCount++;
                 if (response == null) break;
 
-                String connectionHeader = request.getHeaders().getOrDefault("connection", "")
-                        .toLowerCase();
+                String connectionHeader =
+                        request.getHeaders().getOrDefault("connection", "").toLowerCase();
 
                 if ("close".equals(connectionHeader) || response.getStatusCode() >= 400) {
                     keepAlive = false;
@@ -120,7 +117,6 @@ public class CustomWebServer {
             out.flush();
         }
     }
-
 
     public void stop() {
         running = false;

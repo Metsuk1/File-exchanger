@@ -1,13 +1,12 @@
 package com.file_exchange.handlers.dispatcher;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.file_exchange.dto.FileDto;
 import com.file_exchange.handlers.utilsFiles.MimeTypeUtils;
 import com.file_exchange.http.HttpResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.*;
 
 /**
  * Converts invocation results to HttpResponse
@@ -26,21 +25,23 @@ public class ResponseConverter {
             return HttpResponse.ok(str.getBytes(), "text/plain");
         } else if (result instanceof byte[] bytes) {
             return HttpResponse.ok(bytes, "application/octet-stream");
-        }else if(result instanceof FileDto fd){
+        } else if (result instanceof FileDto fd) {
             try (InputStream is = fd.getInputStream()) {
                 byte[] data = is.readAllBytes();
 
                 Map<String, String> headers = new HashMap<>();
-                String filename = (fd.getFileName() != null && !fd.getFileName().isBlank())
-                        ? fd.getFileName() : "download";
+                String filename =
+                        (fd.getFileName() != null && !fd.getFileName().isBlank()) ? fd.getFileName() : "download";
                 headers.put("Content-Disposition", "attachment; filename=\"" + filename + "\"");
 
-                String contentType = (fd.getContentType() != null && !fd.getContentType().isBlank())
-                        ? fd.getContentType() : MimeTypeUtils.detect(fd.getFileName());
+                String contentType =
+                        (fd.getContentType() != null && !fd.getContentType().isBlank())
+                                ? fd.getContentType()
+                                : MimeTypeUtils.detect(fd.getFileName());
 
                 return HttpResponse.ok(data, contentType, headers);
             }
-        }else if(result instanceof InputStream in){
+        } else if (result instanceof InputStream in) {
             // fallback: if somewhere else they return a clean stream
             try (InputStream is = in) {
                 byte[] data = is.readAllBytes();

@@ -3,15 +3,14 @@ package com.file_exchange.handlers.dispatcher;
 import com.file_exchange.handlers.utilsFiles.InputStreamRequestContext;
 import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import com.file_exchange.http.HttpRequest;
-import org.apache.commons.fileupload.*;
-import org.apache.commons.fileupload.util.Streams;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.fileupload.*;
+import org.apache.commons.fileupload.util.Streams;
 
 /**
  *  Parses incoming requests.
@@ -50,7 +49,7 @@ public class HttpRequestParser {
         byte[] endMarker = "\r\n\r\n".getBytes(StandardCharsets.UTF_8);
 
         // Read the HTTP headers until the end marker (\r\n\r\n) is reached
-         while ((b = bufferedStream.read()) != -1) {
+        while ((b = bufferedStream.read()) != -1) {
             headerBuffer.write(b);
 
             if (b == endMarker[matchIndex]) {
@@ -77,7 +76,7 @@ public class HttpRequestParser {
         String path = fullPath.split("\\?")[0];
         Map<String, String> queryParam = parseQueryParams(fullPath);
 
-        //Parse all other header lines into a Map
+        // Parse all other header lines into a Map
         Map<String, String> headers = new HashMap<>();
         for (int i = 1; i < lines.length; i++) {
             String line = lines[i].trim();
@@ -85,8 +84,9 @@ public class HttpRequestParser {
 
             int idx = line.indexOf(":");
             if (idx > 0) {
-                headers.put(line.substring(0, idx).trim().toLowerCase(),// header name
-                        line.substring(idx + 1).trim());      // header value
+                headers.put(
+                        line.substring(0, idx).trim().toLowerCase(), // header name
+                        line.substring(idx + 1).trim()); // header value
             }
         }
 
@@ -99,7 +99,7 @@ public class HttpRequestParser {
             // Otherwise, parse it as a normal text body
             String body = parseTextBody(bufferedStream, method, headers);
             // return new HttpRequest(method, fullPath, headers, body, new HashMap<>(),queryParam);
-            return new HttpRequest(method, path, headers, body, new HashMap<>(),queryParam);
+            return new HttpRequest(method, path, headers, body, new HashMap<>(), queryParam);
         }
     }
 
@@ -107,9 +107,8 @@ public class HttpRequestParser {
      * Parses multipart/form-data requests using Apache Commons FileUpload's streaming API.
      * This approach avoids loading entire files into memory at once.
      */
-    private HttpRequest  parseMultipartStreaming(InputStream inputStream,
-                                                 String method, String path,
-                                                 Map<String, String> headers) throws IOException {
+    private HttpRequest parseMultipartStreaming(
+            InputStream inputStream, String method, String path, Map<String, String> headers) throws IOException {
         String boundary = extractBoundary(headers.get("content-type"));
         if (boundary == null) throw new IOException("Missing multipart boundary");
 
@@ -123,7 +122,6 @@ public class HttpRequestParser {
             upload.setSizeMax(MAX_FILE_SIZE);
 
             FileItemIterator iterator = upload.getItemIterator(requestContext);
-
 
             while (iterator.hasNext()) {
                 FileItemStream item = iterator.next();
@@ -143,7 +141,7 @@ public class HttpRequestParser {
 
                     // Copy file data from the upload stream to the temp file
                     try (InputStream fileStream = item.openStream();
-                         FileOutputStream fos = new FileOutputStream(tempFile.toFile())) {
+                            FileOutputStream fos = new FileOutputStream(tempFile.toFile())) {
 
                         // copy file in 1 thread - only 8KB buffer in memory
                         byte[] buffer = new byte[8192];
@@ -162,14 +160,14 @@ public class HttpRequestParser {
         }
 
         // Return a constructed HttpRequest object with parsed form data
-        return new HttpRequest(method, path, headers, "", parts,new HashMap<>());
+        return new HttpRequest(method, path, headers, "", parts, new HashMap<>());
     }
 
     /**
      * Reads plain text request bodies (non-multipart).
      */
-    private String parseTextBody(InputStream inputStream, String method,
-                                 Map<String, String> headers) throws IOException {
+    private String parseTextBody(InputStream inputStream, String method, Map<String, String> headers)
+            throws IOException {
         if (!isBodyExpected(method) || !headers.containsKey("content-length")) return "";
 
         int length = Integer.parseInt(headers.get("content-length"));
@@ -194,7 +192,8 @@ public class HttpRequestParser {
      * Checks if the request's Content-Type indicates a multipart/form-data request.
      */
     private boolean isMultipart(Map<String, String> headers) {
-        return headers.containsKey("content-type") && headers.get("content-type").contains("multipart/form-data");
+        return headers.containsKey("content-type")
+                && headers.get("content-type").contains("multipart/form-data");
     }
     /**
      * Extracts the multipart boundary string from the Content-Type header.
@@ -219,5 +218,4 @@ public class HttpRequestParser {
         }
         return queryParams;
     }
-
 }

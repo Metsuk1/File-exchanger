@@ -32,8 +32,7 @@ public class Builder {
      * create a object without start
      */
     public CustomExecutorService build() {
-        return new CustomExecutorService(corePoolSize, useVirtualThreads,
-                threadNamePrefix, workQueue);
+        return new CustomExecutorService(corePoolSize, useVirtualThreads, threadNamePrefix, workQueue);
     }
 
     /**
@@ -43,4 +42,3 @@ public class Builder {
         return build().start();
     }
 }
-

@@ -13,9 +13,15 @@ public class FileDto {
         this.inputStream = inputStream;
     }
 
-    public String getFileName() { return fileName; }
+    public String getFileName() {
+        return fileName;
+    }
 
-    public String getContentType() { return contentType; }
+    public String getContentType() {
+        return contentType;
+    }
 
-    public InputStream getInputStream() { return inputStream; }
+    public InputStream getInputStream() {
+        return inputStream;
+    }
 }

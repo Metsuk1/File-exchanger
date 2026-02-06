@@ -1,6 +1,5 @@
 package com.file_exchange.entity;
 
-
 public class File {
     private Long id;
     private Long userId;
@@ -60,12 +59,11 @@ public class File {
 
     @Override
     public String toString() {
-        return "File{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", fileName='" + fileName + '\'' +
-                ", filePath='" + filePath + '\'' +
-                ", size=" + size +
-                '}';
+        return "File{" + "id="
+                + id + ", userId="
+                + userId + ", fileName='"
+                + fileName + '\'' + ", filePath='"
+                + filePath + '\'' + ", size="
+                + size + '}';
     }
 }

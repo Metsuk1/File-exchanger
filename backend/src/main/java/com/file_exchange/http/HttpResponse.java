@@ -1,10 +1,9 @@
 package com.file_exchange.http;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -15,7 +14,7 @@ public class HttpResponse {
     private byte[] body;
     private Map<String, String> headers = new HashMap<>();
 
-  public  static  HttpResponse ok(byte[] body, String type) {
+    public static HttpResponse ok(byte[] body, String type) {
         HttpResponse r = new HttpResponse();
         r.statusCode = 200;
         r.statusText = "OK";
@@ -24,7 +23,7 @@ public class HttpResponse {
         return r;
     }
 
-    public static HttpResponse ok(byte[] body, String type,Map<String, String> headers) {
+    public static HttpResponse ok(byte[] body, String type, Map<String, String> headers) {
         HttpResponse r = ok(body, type);
         if (headers != null) {
             r.headers.putAll(headers);
@@ -73,4 +72,3 @@ public class HttpResponse {
         return r;
     }
 }
-
