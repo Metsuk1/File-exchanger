@@ -1,15 +1,14 @@
 package com.file_exchange.executor;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 public class CustomExecutorServiceTest {
     private CustomExecutorService platformExecutor;
@@ -126,9 +125,18 @@ public class CustomExecutorServiceTest {
     @Timeout(timeoutSeconds)
     void testInvokeAny() throws InterruptedException, ExecutionException {
         List<Callable<Integer>> tasks = new ArrayList<>();
-        tasks.add(() -> { Thread.sleep(100); return 1; });
-        tasks.add(() -> { Thread.sleep(50); return 2; });
-        tasks.add(() -> { Thread.sleep(150); return 3; });
+        tasks.add(() -> {
+            Thread.sleep(100);
+            return 1;
+        });
+        tasks.add(() -> {
+            Thread.sleep(50);
+            return 2;
+        });
+        tasks.add(() -> {
+            Thread.sleep(150);
+            return 3;
+        });
 
         Integer result = platformExecutor.invokeAny(tasks);
         platformExecutor.shutdown();
@@ -166,7 +174,6 @@ public class CustomExecutorServiceTest {
     void testShutdownNow() throws InterruptedException {
         AtomicInteger counter = new AtomicInteger(0);
 
-
         platformExecutor.execute(() -> {
             try {
                 Thread.sleep(5000); // Long-running task
@@ -187,28 +194,138 @@ public class CustomExecutorServiceTest {
     @Test
     void testRejectedExecutionAfterShutdown() {
         platformExecutor.shutdown();
-        assertThrows(RejectedExecutionException.class, () ->
-                        platformExecutor.execute(() -> {}),
+        assertThrows(
+                RejectedExecutionException.class,
+                () -> platformExecutor.execute(() -> {}),
                 "Should throw RejectedExecutionException after shutdown");
     }
 
     @Test
     void testStartCalledTwice() {
-        assertThrows(IllegalStateException.class, () ->
-                        platformExecutor.start(),
+        assertThrows(
+                IllegalStateException.class,
+                () -> platformExecutor.start(),
                 "Calling start() twice should throw IllegalStateException");
     }
 
     @Test
     void testNullTaskSubmission() {
-        assertThrows(NullPointerException.class, () ->
-                        platformExecutor.execute(null),
+        assertThrows(
+                NullPointerException.class,
+                () -> platformExecutor.execute(null),
                 "Executing null task should throw NullPointerException");
-        assertThrows(NullPointerException.class, () ->
-                        platformExecutor.submit((Runnable) null),
+        assertThrows(
+                NullPointerException.class,
+                () -> platformExecutor.submit((Runnable) null),
                 "Submitting null runnable should throw NullPointerException");
-        assertThrows(NullPointerException.class, () ->
-                        platformExecutor.submit((Callable<?>) null),
+        assertThrows(
+                NullPointerException.class,
+                () -> platformExecutor.submit((Callable<?>) null),
                 "Submitting null callable should throw NullPointerException");
+    }
+
+    @Test
+    void testVirtualThreadPerTaskExecutor() throws Exception {
+        AtomicInteger counter = new AtomicInteger(0);
+        virtualPerTaskExecutor.start();
+
+        Future<?> future = virtualPerTaskExecutor.submit(counter::incrementAndGet);
+        future.get(timeoutSeconds, TimeUnit.SECONDS);
+
+        assertEquals(1, counter.get());
+        virtualPerTaskExecutor.shutdown();
+        assertTrue(virtualPerTaskExecutor.isShutdown());
+        assertTrue(virtualPerTaskExecutor.isTerminated());
+    }
+
+    @Test
+    void testVirtualThreadPerTaskExecutorAwaitTermination() throws Exception {
+        virtualPerTaskExecutor.start();
+        virtualPerTaskExecutor.shutdown();
+        assertTrue(virtualPerTaskExecutor.awaitTermination(100, TimeUnit.MILLISECONDS));
+    }
+
+    @Test
+    void testVirtualThreadPerTaskExecutorRejectAfterShutdown() {
+        virtualPerTaskExecutor.start();
+        virtualPerTaskExecutor.shutdown();
+        assertThrows(RejectedExecutionException.class, () -> virtualPerTaskExecutor.execute(() -> {}));
+    }
+
+    @Test
+    void testVirtualThreadPerTaskExecutorNullCommand() {
+        virtualPerTaskExecutor.start();
+        assertThrows(NullPointerException.class, () -> virtualPerTaskExecutor.execute(null));
+    }
+
+    @Test
+    void testSubmitRunnableWithResult() throws Exception {
+        String expectedResult = "completed";
+        Future<String> future = platformExecutor.submit(() -> {}, expectedResult);
+
+        String result = future.get(timeoutSeconds, TimeUnit.SECONDS);
+        assertEquals(expectedResult, result);
+        platformExecutor.shutdown();
+    }
+
+    @Test
+    void testInvokeAllNullTasks() {
+        assertThrows(NullPointerException.class, () -> platformExecutor.invokeAll(null));
+    }
+
+    @Test
+    void testAwaitTerminationWithoutShutdown() throws Exception {
+        boolean terminated = platformExecutor.awaitTermination(100, TimeUnit.MILLISECONDS);
+        assertFalse(terminated, "Should return false if not shutdown");
+        platformExecutor.shutdown();
+    }
+
+    @Test
+    void testBuilderValidation() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Builder().corePoolSize(0).build());
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Builder().corePoolSize(-1).build());
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Builder().threadNamePrefix(null).build());
+    }
+
+    @Test
+    void testExecutorNotStarted() {
+        CustomExecutorService notStarted = new Builder().corePoolSize(2).build();
+        assertThrows(IllegalStateException.class, () -> notStarted.execute(() -> {}));
+        assertThrows(IllegalStateException.class, () -> notStarted.shutdown());
+    }
+
+    @Test
+    void testIsShutdownBeforeStart() {
+        CustomExecutorService notStarted = new Builder().corePoolSize(2).build();
+        assertFalse(notStarted.isShutdown());
+        assertFalse(notStarted.isTerminated());
+    }
+
+    @Test
+    void testStaticBuilder() {
+        Builder builder = CustomExecutorService.builder();
+        assertNotNull(builder);
+    }
+
+    @Test
+    void testInvokeAllWithTimeout() throws Exception {
+        List<Callable<Integer>> tasks = List.of(() -> 1, () -> 2);
+        List<Future<Integer>> futures = platformExecutor.invokeAll(tasks, 1, TimeUnit.SECONDS);
+        assertTrue(futures.isEmpty(), "This implementation returns empty list for timeout version");
+        platformExecutor.shutdown();
+    }
+
+    @Test
+    void testInvokeAnyWithTimeout() throws Exception {
+        List<Callable<Integer>> tasks = List.of(() -> 1);
+        Integer result = platformExecutor.invokeAny(tasks, 1, TimeUnit.SECONDS);
+        assertNull(result, "This implementation returns null for timeout version");
+        platformExecutor.shutdown();
     }
 }

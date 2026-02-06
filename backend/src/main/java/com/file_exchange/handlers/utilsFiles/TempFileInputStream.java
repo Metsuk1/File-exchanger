@@ -16,7 +16,7 @@ public class TempFileInputStream extends FileInputStream implements AutoCloseabl
     private final long fileSize;
     private boolean closed = false;
 
-    public TempFileInputStream(Path tempFilePath, String originalFileName, long fileSize) throws  FileNotFoundException {
+    public TempFileInputStream(Path tempFilePath, String originalFileName, long fileSize) throws FileNotFoundException {
         super(tempFilePath.toFile());
         this.tempFilePath = tempFilePath;
         this.originalFileName = originalFileName;
@@ -37,13 +37,13 @@ public class TempFileInputStream extends FileInputStream implements AutoCloseabl
 
     @Override
     public void close() throws IOException {
-        if(!closed) {
+        if (!closed) {
             closed = true;
             super.close();
 
-            try{
+            try {
                 Files.deleteIfExists(tempFilePath);
-            }catch(IOException e){
+            } catch (IOException e) {
                 throw new IOException(e.getMessage());
             }
         }

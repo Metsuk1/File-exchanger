@@ -6,8 +6,6 @@ import com.file_exchange.entity.File;
 import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import com.file_exchange.services.FileService;
 import com.file_exchange.utils.JwtUtil;
-
-import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +19,9 @@ public class FileController {
     }
 
     @CustomPostMapping("/upload")
-    public Map<String, Object> upload(@CustomRequestHeader("Authorization") String auth,
-                                      @CustomRequestPart("file") TempFileInputStream filePart) {
-
+    public Map<String, Object> upload(
+            @CustomRequestHeader("Authorization") String auth,
+            @CustomRequestPart("file") TempFileInputStream filePart) {
 
         Long userId = extractUserId(auth);
 
@@ -43,8 +41,8 @@ public class FileController {
     }
 
     @CustomGetMapping("/download")
-    public FileDto download(@CustomRequestHeader("Authorization") String auth,
-                            @CustomRequestParam("fileId") Long fileId) {
+    public FileDto download(
+            @CustomRequestHeader("Authorization") String auth, @CustomRequestParam("fileId") Long fileId) {
 
         Long userId = extractUserId(auth);
 
@@ -52,12 +50,12 @@ public class FileController {
     }
 
     @CustomDeleteMapping
-    public Map<String,Object> deleteFile(@CustomRequestHeader("Authorization") String auth,
-                                         @CustomRequestParam("fileId") Long fileId){
+    public Map<String, Object> deleteFile(
+            @CustomRequestHeader("Authorization") String auth, @CustomRequestParam("fileId") Long fileId) {
 
         Long userId = extractUserId(auth);
 
-        fileService.deleteFile(userId,fileId);
+        fileService.deleteFile(userId, fileId);
 
         return Map.of("status", "deleted", "fileId", fileId);
     }
@@ -76,5 +74,4 @@ public class FileController {
             throw new IllegalArgumentException("Invalid user ID in token");
         }
     }
-
 }

@@ -1,11 +1,10 @@
 package com.file_exchange.http;
 
-import lombok.Getter;
-
+import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
+import lombok.Getter;
 import lombok.ToString;
 
 @Getter
@@ -15,10 +14,16 @@ public class HttpRequest {
     private final String path;
     private final Map<String, String> headers;
     private final String body;
-    private final Map<String, Object> parts;//for multipart -  parts
+    private final Map<String, Object> parts; // for multipart -  parts
     private final Map<String, String> queryParams;
 
-    public HttpRequest(String method, String path, Map<String, String> headers, String body, Map<String, Object> parts,Map<String, String> queryParams) {
+    public HttpRequest(
+            String method,
+            String path,
+            Map<String, String> headers,
+            String body,
+            Map<String, Object> parts,
+            Map<String, String> queryParams) {
         this.method = method;
         this.path = path;
         this.headers = headers;
@@ -26,7 +31,6 @@ public class HttpRequest {
         this.parts = parts != null ? parts : new HashMap<>();
         this.queryParams = queryParams;
     }
-
 
     public InputStream getPartAsStream(String partName) {
         Object part = parts.get(partName);
@@ -50,5 +54,4 @@ public class HttpRequest {
         }
         return null;
     }
-
 }

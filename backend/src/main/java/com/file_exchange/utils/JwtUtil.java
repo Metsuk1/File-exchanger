@@ -3,10 +3,9 @@ package com.file_exchange.utils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
-import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import javax.crypto.SecretKey;
 
 public class JwtUtil {
     private static final String SECRET_KEY = getSecretKey();
@@ -15,9 +14,7 @@ public class JwtUtil {
     private static String getSecretKey() {
         String key = System.getenv("JWT_SECRET");
         if (key == null || key.trim().isEmpty()) {
-            throw new IllegalStateException(
-                    "SECURITY ERROR: JWT_SECRET not found! "
-            );
+            throw new IllegalStateException("SECURITY ERROR: JWT_SECRET not found! ");
         }
         if (key.length() < 32) {
             throw new IllegalArgumentException("JWT_SECRET is too short! Minimum 32 characters for HS256.");
@@ -38,7 +35,7 @@ public class JwtUtil {
         try {
             SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
             return Jwts.parser()
-                    .verifyWith(key)
+                    .verifyWith(key) // ?
                     .build()
                     .parseSignedClaims(token)
                     .getPayload()

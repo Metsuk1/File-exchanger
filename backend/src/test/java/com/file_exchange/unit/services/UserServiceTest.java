@@ -1,5 +1,9 @@
 package com.file_exchange.unit.services;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import com.file_exchange.dto.UserDto;
 import com.file_exchange.repository.UserRepository;
 import com.file_exchange.services.UserService;
@@ -8,10 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @DisplayName("UserService tests")
 public class UserServiceTest {
@@ -42,8 +42,7 @@ public class UserServiceTest {
         savedDto.setEmail("john@example.com");
         savedDto.setPassword("password123");
 
-        when(userRepository.createUser(any(UserDto.class), anyString()))
-                .thenReturn(savedDto);
+        when(userRepository.createUser(any(UserDto.class), anyString())).thenReturn(savedDto);
 
         // Act
         UserDto result = userService.register(inputDto, "password123");
@@ -130,10 +129,8 @@ public class UserServiceTest {
         when(userRepository.findUserByEmail(email)).thenReturn(null);
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> userService.login(email, password)
-        );
+        IllegalArgumentException exception =
+                assertThrows(IllegalArgumentException.class, () -> userService.login(email, password));
         assertEquals("user null", exception.getMessage());
         verify(userRepository, times(1)).findUserByEmail(email);
     }
@@ -154,10 +151,8 @@ public class UserServiceTest {
         when(userRepository.findUserByEmail(email)).thenReturn(userDto);
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> userService.login(email, wrongPassword)
-        );
+        IllegalArgumentException exception =
+                assertThrows(IllegalArgumentException.class, () -> userService.login(email, wrongPassword));
         assertEquals("Invalid password", exception.getMessage());
         verify(userRepository, times(1)).findUserByEmail(email);
     }

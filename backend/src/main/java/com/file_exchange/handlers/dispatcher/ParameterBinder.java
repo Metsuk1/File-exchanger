@@ -1,16 +1,12 @@
 package com.file_exchange.handlers.dispatcher;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.file_exchange.annotations.*;
 import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import com.file_exchange.http.HttpRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +20,7 @@ public class ParameterBinder {
         this.objectMapper = objectMapper;
     }
 
-    public Object[] bindParameters(Method method, HttpRequest request,String mappingPath) throws IOException {
+    public Object[] bindParameters(Method method, HttpRequest request, String mappingPath) throws IOException {
         var params = method.getParameters();
         Object[] args = new Object[params.length];
         Map<String, String> queryParams = request.getQueryParams();
@@ -39,10 +35,13 @@ public class ParameterBinder {
             } else if (params[i].isAnnotationPresent(CustomPathVariable.class)) {
                 String name = params[i].getAnnotation(CustomPathVariable.class).value();
                 args[i] = convertValue(pathVariables.get(name), params[i].getType());
-            }else if (params[i].isAnnotationPresent(CustomRequestHeader.class)){
-                String name = params[i].getAnnotation(CustomRequestHeader.class).value().toLowerCase(); // .toLowerCase()
+            } else if (params[i].isAnnotationPresent(CustomRequestHeader.class)) {
+                String name = params[i]
+                        .getAnnotation(CustomRequestHeader.class)
+                        .value()
+                        .toLowerCase(); // .toLowerCase()
                 args[i] = request.getHeaders().get(name);
-            }else if (params[i].isAnnotationPresent(CustomRequestPart.class)) {
+            } else if (params[i].isAnnotationPresent(CustomRequestPart.class)) {
                 String name = params[i].getAnnotation(CustomRequestPart.class).value();
 
                 if (params[i].getType() == InputStream.class) {
@@ -51,10 +50,11 @@ public class ParameterBinder {
                     args[i] = request.getPartAsString(name);
                 } else if (params[i].getType() == Long.class || params[i].getType() == long.class) {
                     args[i] = request.getPartAsLong(name);
-                }else if (params[i].getType() == TempFileInputStream.class){
+                } else if (params[i].getType() == TempFileInputStream.class) {
                     args[i] = request.getPartAsTempFile(name);
                 } else {
-                    throw new IllegalArgumentException("Unsupported type for @CustomRequestPart: " + params[i].getType().getName());
+                    throw new IllegalArgumentException("Unsupported type for @CustomRequestPart: "
+                            + params[i].getType().getName());
                 }
             }
         }
@@ -87,7 +87,6 @@ public class ParameterBinder {
         }
         return value;
     }
-
 
     private Map<String, String> extractPathVariables(String mappingPath, String requestPath) {
         Map<String, String> variables = new HashMap<>();

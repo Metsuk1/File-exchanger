@@ -1,17 +1,16 @@
 package com.file_exchange.services;
 
 import com.file_exchange.dto.FileDto;
+import com.file_exchange.entity.File;
 import com.file_exchange.handlers.utilsFiles.MimeTypeUtils;
 import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import com.file_exchange.repository.FileRepository;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import com.file_exchange.entity.File;
 
 public class FileService {
     private final FileRepository fileRepository;
@@ -42,11 +41,12 @@ public class FileService {
 
                 Files.createDirectories(targetPath.getParent());
 
-               try (tempStream) {
-                   Files.copy(tempPath, targetPath, StandardCopyOption.REPLACE_EXISTING);
-               }
+                try (tempStream) {
+                    Files.copy(tempPath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                }
             } else {
-                try (fileStream; FileOutputStream fos = new FileOutputStream(filePath)) {
+                try (fileStream;
+                        FileOutputStream fos = new FileOutputStream(filePath)) {
                     fileStream.transferTo(fos);
                 }
             }
@@ -58,7 +58,8 @@ public class FileService {
             return fileId;
 
         } catch (Exception e) {
-            throw new IllegalArgumentException("Failed to upload file '" + fileName + "' for user " + userId + ": " + e.getMessage(), e);
+            throw new IllegalArgumentException(
+                    "Failed to upload file '" + fileName + "' for user " + userId + ": " + e.getMessage(), e);
         }
     }
 
@@ -77,7 +78,7 @@ public class FileService {
 
             try {
                 contentType = Files.probeContentType(Paths.get(file.getFilePath()));
-            }catch (Exception ignore) {
+            } catch (Exception ignore) {
                 // ignore,because there is no need to handle error and print it
             }
 
@@ -85,7 +86,7 @@ public class FileService {
                 contentType = MimeTypeUtils.detect(file.getFileName());
             }
 
-            return new FileDto(file.getFileName(),contentType,is);
+            return new FileDto(file.getFileName(), contentType, is);
         } catch (FileNotFoundException e) {
             throw new RuntimeException("File not found", e);
         }
@@ -93,29 +94,29 @@ public class FileService {
 
     public void deleteFile(Long userId, Long fileId) {
         File file = fileRepository.getFileById(fileId, userId);
-        if(file == null) {
+        if (file == null) {
             throw new IllegalArgumentException("File not found");
         }
 
-       Path path = Paths.get(file.getFilePath());
+        Path path = Paths.get(file.getFilePath());
 
-       try{
-           if(Files.exists(path)){
-              try{
-                  Files.delete(path);
-              }catch (java.nio.file.FileSystemException ex) {
-                  try {
-                      Thread.sleep(50);
-                  } catch (InterruptedException ignored) {
-                      // ignored for quick replay if the file was just used
-                  }
-                  Files.delete(path);
-              }
-           }
-       } catch (IOException e) {
-           throw new RuntimeException("Failed to delete file: " + e.getMessage(), e);
-       }
-        fileRepository.deleteFile(fileId,userId);
+        try {
+            if (Files.exists(path)) {
+                try {
+                    Files.delete(path);
+                } catch (java.nio.file.FileSystemException ex) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ignored) {
+                        // ignored for quick replay if the file was just used
+                    }
+                    Files.delete(path);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete file: " + e.getMessage(), e);
+        }
+        fileRepository.deleteFile(fileId, userId);
     }
 
     public String getFilePath(Long userId, Long fileId) {
