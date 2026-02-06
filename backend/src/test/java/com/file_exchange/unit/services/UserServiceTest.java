@@ -2,10 +2,13 @@ package com.file_exchange.unit.services;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import com.file_exchange.dto.UserDto;
 import com.file_exchange.repository.UserRepository;
+import com.file_exchange.security.PasswordEncoder;
+import com.file_exchange.security.PasswordValidator;
 import com.file_exchange.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,12 +22,18 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private PasswordValidator passwordValidator;
+
     private UserService userService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        userService = new UserService(userRepository);
+        userService = new UserService(userRepository, passwordEncoder, passwordValidator);
     }
 
     @Test
@@ -34,146 +43,151 @@ public class UserServiceTest {
         UserDto inputDto = new UserDto();
         inputDto.setName("John Doe");
         inputDto.setEmail("john@example.com");
-        inputDto.setPassword("password123");
 
         UserDto savedDto = new UserDto();
         savedDto.setId(1L);
         savedDto.setName("John Doe");
         savedDto.setEmail("john@example.com");
-        savedDto.setPassword("password123");
 
-        when(userRepository.createUser(any(UserDto.class), anyString())).thenReturn(savedDto);
+        when(userRepository.existsByEmail("john@example.com")).thenReturn(false);
+        when(passwordEncoder.encode("StrongPass123")).thenReturn("hashedPassword");
+        when(userRepository.save(any(UserDto.class), eq("hashedPassword"))).thenReturn(savedDto);
+        doNothing().when(passwordValidator).validate(anyString());
 
         // Act
-        UserDto result = userService.register(inputDto, "password123");
+        UserDto result = userService.register(inputDto, "StrongPass123");
 
         // Assert
         assertNotNull(result);
         assertEquals(1L, result.getId());
         assertEquals("John Doe", result.getName());
-        assertEquals("john@example.com", result.getEmail());
-        verify(userRepository, times(1)).createUser(any(UserDto.class), eq("password123"));
+        assertNull(result.getPassword()); // Password should not be returned
+        verify(passwordValidator).validate("StrongPass123");
+        verify(passwordEncoder).encode("StrongPass123");
+        verify(userRepository).save(any(UserDto.class), eq("hashedPassword"));
     }
 
     @Test
     @DisplayName("Should throw exception when name is null")
     void testRegisterWithNullName() {
-        // Arrange
         UserDto dto = new UserDto();
         dto.setName(null);
         dto.setEmail("john@example.com");
-        dto.setPassword("password123");
 
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            userService.register(dto, "password123");
-        });
-        verify(userRepository, never()).createUser(any(), any());
+        assertThrows(IllegalArgumentException.class, () -> userService.register(dto, "StrongPass123"));
+        verify(userRepository, never()).save(any(), any());
     }
 
     @Test
     @DisplayName("Should throw exception when name is empty")
     void testRegisterWithEmptyName() {
-        // Arrange
         UserDto dto = new UserDto();
         dto.setName("   ");
         dto.setEmail("john@example.com");
-        dto.setPassword("password123");
 
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            userService.register(dto, "password123");
-        });
-        verify(userRepository, never()).createUser(any(), any());
+        assertThrows(IllegalArgumentException.class, () -> userService.register(dto, "StrongPass123"));
+        verify(userRepository, never()).save(any(), any());
     }
 
     @Test
     @DisplayName("Should throw exception when email is null")
     void testRegisterWithNullEmail() {
-        // Arrange
         UserDto dto = new UserDto();
         dto.setName("John Doe");
         dto.setEmail(null);
-        dto.setPassword("password123");
 
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            userService.register(dto, "password123");
-        });
-        verify(userRepository, never()).createUser(any(), any());
+        assertThrows(IllegalArgumentException.class, () -> userService.register(dto, "StrongPass123"));
+        verify(userRepository, never()).save(any(), any());
     }
 
     @Test
     @DisplayName("Should throw exception when email format is invalid")
     void testRegisterWithInvalidEmail() {
-        // Arrange
         UserDto dto = new UserDto();
         dto.setName("John Doe");
         dto.setEmail("invalid-email");
-        dto.setPassword("password123");
 
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            userService.register(dto, "password123");
-        });
-        verify(userRepository, never()).createUser(any(), any());
+        assertThrows(IllegalArgumentException.class, () -> userService.register(dto, "StrongPass123"));
+        verify(userRepository, never()).save(any(), any());
     }
 
     @Test
-    @DisplayName("Should throw exception when user not found")
+    @DisplayName("Should throw exception when password validation fails")
+    void testRegisterWithInvalidPassword() {
+        UserDto dto = new UserDto();
+        dto.setName("John Doe");
+        dto.setEmail("john@example.com");
+
+        doThrow(new IllegalArgumentException("Password must be at least 8 characters"))
+                .when(passwordValidator)
+                .validate("weak");
+
+        IllegalArgumentException ex =
+                assertThrows(IllegalArgumentException.class, () -> userService.register(dto, "weak"));
+        assertEquals("Password must be at least 8 characters", ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should throw exception when email already exists")
+    void testRegisterWithExistingEmail() {
+        UserDto dto = new UserDto();
+        dto.setName("John Doe");
+        dto.setEmail("existing@example.com");
+
+        doNothing().when(passwordValidator).validate(anyString());
+        when(userRepository.existsByEmail("existing@example.com")).thenReturn(true);
+
+        IllegalArgumentException ex =
+                assertThrows(IllegalArgumentException.class, () -> userService.register(dto, "StrongPass123"));
+        assertEquals("User with this email already exists", ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should throw generic error when user not found - prevents user enumeration")
     void testLoginUserNotFound() {
-        // Arrange
         String email = "nonexistent@example.com";
-        String password = "password123";
+        String password = "StrongPass123";
 
         when(userRepository.findUserByEmail(email)).thenReturn(null);
+        when(passwordEncoder.matchesSafely(password, null)).thenReturn(false);
 
-        // Act & Assert
         IllegalArgumentException exception =
                 assertThrows(IllegalArgumentException.class, () -> userService.login(email, password));
-        assertEquals("user null", exception.getMessage());
-        verify(userRepository, times(1)).findUserByEmail(email);
+
+        assertEquals("Invalid email or password", exception.getMessage());
+        verify(passwordEncoder).matchesSafely(password, null);
     }
 
     @Test
-    @DisplayName("Should throw exception when password is incorrect")
+    @DisplayName("Should throw generic error when password is incorrect - prevents user enumeration")
     void testLoginIncorrectPassword() {
-        // Arrange
         String email = "john@example.com";
-        String correctPassword = "password123";
-        String wrongPassword = "wrongpassword";
+        String wrongPassword = "WrongPass456";
+        String storedHash = "hashedPassword";
 
         UserDto userDto = new UserDto();
         userDto.setId(1L);
         userDto.setEmail(email);
-        userDto.setPassword(correctPassword);
+        userDto.setPassword(storedHash);
 
         when(userRepository.findUserByEmail(email)).thenReturn(userDto);
+        when(passwordEncoder.matchesSafely(wrongPassword, storedHash)).thenReturn(false);
 
-        // Act & Assert
         IllegalArgumentException exception =
                 assertThrows(IllegalArgumentException.class, () -> userService.login(email, wrongPassword));
-        assertEquals("Invalid password", exception.getMessage());
-        verify(userRepository, times(1)).findUserByEmail(email);
+
+        assertEquals("Invalid email or password", exception.getMessage());
     }
 
     @Test
     @DisplayName("Should throw exception when password is null")
     void testLoginWithNullPassword() {
-        // Arrange
         String email = "john@example.com";
 
-        UserDto userDto = new UserDto();
-        userDto.setId(1L);
-        userDto.setEmail(email);
-        userDto.setPassword("password123");
+        when(userRepository.findUserByEmail(email)).thenReturn(null);
+        when(passwordEncoder.matchesSafely(null, null))
+                .thenThrow(new IllegalArgumentException("Password cannot be null"));
 
-        when(userRepository.findUserByEmail(email)).thenReturn(userDto);
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            userService.login(email, null);
-        });
-        verify(userRepository, times(1)).findUserByEmail(email);
+        assertThrows(IllegalArgumentException.class, () -> userService.login(email, null));
     }
 }
