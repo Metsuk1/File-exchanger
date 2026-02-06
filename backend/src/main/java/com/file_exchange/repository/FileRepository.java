@@ -1,8 +1,8 @@
 package com.file_exchange.repository;
 
+import com.file_exchange.entity.File;
 import java.sql.*;
 import java.util.ArrayList;
-import com.file_exchange.entity.File;
 import java.util.List;
 
 public class FileRepository {
@@ -18,17 +18,17 @@ public class FileRepository {
 
     public Long saveFile(File file) {
         String sql = "INSERT INTO files (user_id, file_name, file_path, size) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
+        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, file.getUserId());
             stmt.setString(2, file.getFileName());
             stmt.setString(3, file.getFilePath());
             stmt.setLong(4, file.getSize());
             stmt.executeUpdate();
 
-            try(ResultSet rs = stmt.getGeneratedKeys()) {
-                if(rs.next()) {
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
                     file.setId(rs.getLong(1));
-                }else{
+                } else {
                     throw new SQLException("Failed to get generated file ID");
                 }
             }
@@ -36,7 +36,7 @@ public class FileRepository {
             throw new RuntimeException("Failed to save file", e);
         }
 
-        return file.getId(); // to change,maybe return null ?
+        return file.getId();
     }
 
     public List<File> getUserFiles(Long userId) {
@@ -60,7 +60,6 @@ public class FileRepository {
         return files;
     }
 
-
     public File getFileById(Long fileId, Long userId) {
         try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM files WHERE id = ? AND user_id = ?")) {
             stmt.setLong(1, fileId);
@@ -83,8 +82,7 @@ public class FileRepository {
     }
 
     public void deleteFile(Long fileId, Long userId) {
-        try (PreparedStatement stmt = conn.prepareStatement(
-                "DELETE FROM files WHERE id = ? AND user_id = ?")) {
+        try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM files WHERE id = ? AND user_id = ?")) {
             stmt.setLong(1, fileId);
             stmt.setLong(2, userId);
             stmt.executeUpdate();

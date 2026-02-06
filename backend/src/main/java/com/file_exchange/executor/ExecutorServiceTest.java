@@ -58,7 +58,8 @@ public class ExecutorServiceTest {
             // Memory usage
             System.gc();
             Thread.sleep(1000);
-            long usedMemory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024);
+            long usedMemory =
+                    (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024);
             log(String.format("Memory used after poolSize=%d: %d MB", poolSize, usedMemory));
         }
     }

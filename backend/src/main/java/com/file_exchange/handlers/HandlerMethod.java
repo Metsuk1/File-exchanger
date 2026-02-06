@@ -1,9 +1,8 @@
 package com.file_exchange.handlers;
 
+import java.lang.reflect.Method;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.lang.reflect.Method;
 
 @Getter
 @Setter
@@ -19,5 +18,4 @@ public class HandlerMethod {
         this.path = path;
         this.httpMethod = httpMethod;
     }
-
 }

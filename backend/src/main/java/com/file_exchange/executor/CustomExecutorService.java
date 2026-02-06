@@ -1,52 +1,51 @@
 package com.file_exchange.executor;
 
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import lombok.Getter;
 
 @Getter
 public class CustomExecutorService implements ExecutorService {
     private final int corePoolSize;
     private final boolean useVirtualThreads;
     private final String threadNamePrefix;
-    private final  BlockingQueue<Runnable> workQueue;
+    private final BlockingQueue<Runnable> workQueue;
 
-    //these fields I will initialize in specific method
+    // these fields I will initialize in specific method
     private List<Thread> poolWorkers;
     private AtomicBoolean shutdown;
     private CountDownLatch shutdownLatch;
     private ThreadFactory threadFactory;
     private volatile boolean started = false;
 
-    //package Constructor
-   CustomExecutorService(int corePoolSize, boolean useVirtualThreads,String threadNamePrefix, BlockingQueue<Runnable> workQueue) {
+    // package Constructor
+    CustomExecutorService(
+            int corePoolSize, boolean useVirtualThreads, String threadNamePrefix, BlockingQueue<Runnable> workQueue) {
         // validation
         if (corePoolSize <= 0) {
             throw new IllegalArgumentException("corePoolSize should be greater than 0");
         }
 
-        if(threadNamePrefix == null) {
+        if (threadNamePrefix == null) {
             throw new IllegalArgumentException("threadNamePrefix cannot be null");
         }
 
-       this.corePoolSize = corePoolSize;
-       this.useVirtualThreads = useVirtualThreads;
-       this.threadNamePrefix = threadNamePrefix;
-       this.workQueue = workQueue != null ? workQueue : new LinkedBlockingQueue<>();
-
+        this.corePoolSize = corePoolSize;
+        this.useVirtualThreads = useVirtualThreads;
+        this.threadNamePrefix = threadNamePrefix;
+        this.workQueue = workQueue != null ? workQueue : new LinkedBlockingQueue<>();
     }
 
     /*
     It's the specific method for creation com   plex objects
      */
-    public synchronized CustomExecutorService start(){
-       if(started) {
-           throw new IllegalStateException("CustomExecutorService already started");
-       }
+    public synchronized CustomExecutorService start() {
+        if (started) {
+            throw new IllegalStateException("CustomExecutorService already started");
+        }
 
         // initialization complex objects
         this.poolWorkers = new ArrayList<>();
@@ -54,7 +53,7 @@ public class CustomExecutorService implements ExecutorService {
         this.shutdownLatch = new CountDownLatch(corePoolSize);
         this.threadFactory = createThreadFactory();
 
-        //starting workers
+        // starting workers
         initializeWorkers();
 
         this.started = true;
@@ -86,12 +85,10 @@ public class CustomExecutorService implements ExecutorService {
                 .buildAndStart();
     }
 
-    //Creation ThreadFactory
+    // Creation ThreadFactory
     private ThreadFactory createThreadFactory() {
         if (useVirtualThreads) {
-            return Thread.ofVirtual()
-                    .name(threadNamePrefix + "-", 0)
-                    .factory();
+            return Thread.ofVirtual().name(threadNamePrefix + "-", 0).factory();
         } else {
             return Thread.ofPlatform()
                     .name(threadNamePrefix + "-", 0)
@@ -108,7 +105,7 @@ public class CustomExecutorService implements ExecutorService {
         }
     }
 
-    //Check initialization before use
+    // Check initialization before use
     protected void ensureStarted() {
         if (!started) {
             throw new IllegalStateException("ExecutorService not started. Call start() first.");
@@ -116,40 +113,38 @@ public class CustomExecutorService implements ExecutorService {
     }
 
     /**
-     Worker thread  that continuously takes tasks from the queue and executes them.
-     Uses blocking 'take()' — sleeps efficiently until a new task is available.
+     * Worker thread  that continuously takes tasks from the queue and executes them.
+     * Uses blocking 'take()' — sleeps efficiently until a new task is available.
      */
     private class WorkerRunnable implements Runnable {
         @Override
         public void run() {
             // Continue while executor not shutdown or tasks remain in queue
-            while(!shutdown.get() || !workQueue.isEmpty()) {
-                try{
-                    Runnable task = workQueue.take();// Blocks efficiently
+            while (!shutdown.get() || !workQueue.isEmpty()) {
+                try {
+                    Runnable task = workQueue.take(); // Blocks efficiently
                     task.run();
-                }catch (InterruptedException e){
-                    if(shutdown.get()) {
-                        Thread.currentThread().interrupt();// Restore interrupt status
+                } catch (InterruptedException e) {
+                    if (shutdown.get()) {
+                        Thread.currentThread().interrupt(); // Restore interrupt status
                         break; // Exit on shutdown interrupt
                     }
                     // Otherwise, continue (rare case)
-                }catch(Throwable t){ // Catch Throwable for reliability
+                } catch (Throwable t) { // Catch Throwable for reliability
                     System.err.println("Task execution failed: " + t.getMessage());
                     t.printStackTrace();
                 }
             }
             shutdownLatch.countDown(); // Уменьшаем счётчик в finally
-
         }
     }
-
 
     @Override
     public void shutdown() {
         ensureStarted();
         shutdown.set(true);
         // Interrupt all workers to wake them from take()
-        for(Thread worker : poolWorkers) {
+        for (Thread worker : poolWorkers) {
             worker.interrupt();
         }
     }
@@ -160,7 +155,7 @@ public class CustomExecutorService implements ExecutorService {
 
         shutdown.set(true);
 
-        for(Thread worker : poolWorkers) {
+        for (Thread worker : poolWorkers) {
             worker.interrupt();
         }
         List<Runnable> result = new ArrayList<>();
@@ -193,7 +188,7 @@ public class CustomExecutorService implements ExecutorService {
     public <T> Future<T> submit(Callable<T> task) {
         ensureStarted();
 
-        if(task == null) {
+        if (task == null) {
             throw new NullPointerException();
         }
         FutureTask<T> futureTask = new FutureTask<>(task);
@@ -206,7 +201,7 @@ public class CustomExecutorService implements ExecutorService {
     public <T> Future<T> submit(Runnable task, T result) {
         ensureStarted();
 
-        if(task == null) {
+        if (task == null) {
             throw new NullPointerException();
         }
         FutureTask<T> futureTask = new FutureTask<>(task, result);
@@ -217,7 +212,7 @@ public class CustomExecutorService implements ExecutorService {
 
     @Override
     public Future<?> submit(Runnable task) {
-        return submit(task,null);
+        return submit(task, null);
     }
 
     @Override
@@ -245,12 +240,14 @@ public class CustomExecutorService implements ExecutorService {
     }
 
     @Override
-    public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException {
+    public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit)
+            throws InterruptedException {
         return List.of();
     }
 
     @Override
-    public <T> T invokeAny(Collection<? extends Callable<T>> collection) throws InterruptedException, ExecutionException {
+    public <T> T invokeAny(Collection<? extends Callable<T>> collection)
+            throws InterruptedException, ExecutionException {
         ensureStarted();
 
         List<Future<T>> tasks = new ArrayList<>();
@@ -269,7 +266,8 @@ public class CustomExecutorService implements ExecutorService {
     }
 
     @Override
-    public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit)
+            throws InterruptedException, ExecutionException, TimeoutException {
         return null;
     }
 
@@ -277,10 +275,10 @@ public class CustomExecutorService implements ExecutorService {
     public void execute(Runnable command) {
         ensureStarted();
 
-        if(command == null) {
+        if (command == null) {
             throw new NullPointerException("Command is null");
         }
-        if(shutdown.get()) {
+        if (shutdown.get()) {
             throw new RejectedExecutionException("Executor shutdown");
         }
 
@@ -288,11 +286,10 @@ public class CustomExecutorService implements ExecutorService {
         if (!accepted) {
             throw new RejectedExecutionException("Queue is full, task rejected");
         }
-
     }
 
-    public static CustomExecutorService newVirtualThreadPerTaskExecutor(){
-        return new  VirtualThreadPerTaskExecutor();
+    public static CustomExecutorService newVirtualThreadPerTaskExecutor() {
+        return new VirtualThreadPerTaskExecutor();
     }
 
     private static class VirtualThreadPerTaskExecutor extends CustomExecutorService {
@@ -320,9 +317,7 @@ public class CustomExecutorService implements ExecutorService {
             }
 
             // create new virtual thread for each task
-            Thread.ofVirtual()
-                    .name("virtual-task-thread")
-                    .start(command);
+            Thread.ofVirtual().name("virtual-task-thread").start(command);
         }
 
         @Override
@@ -348,9 +343,6 @@ public class CustomExecutorService implements ExecutorService {
         }
 
         @Override
-        protected void ensureStarted() {
-        }
+        protected void ensureStarted() {}
     }
-
-
 }

@@ -1,6 +1,5 @@
 package com.file_exchange.cli;
 
-
 import com.file_exchange.controllers.FileController;
 import com.file_exchange.controllers.UserController;
 import com.file_exchange.db.DatabaseInitializer;
@@ -9,11 +8,11 @@ import com.file_exchange.repository.UserRepository;
 import com.file_exchange.server.CustomWebServer;
 import com.file_exchange.services.FileService;
 import com.file_exchange.services.UserService;
-
 import java.lang.reflect.InvocationTargetException;
 
 public class Main {
-    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static void main(String[] args)
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         try {
             DatabaseInitializer dbInitializer = new DatabaseInitializer();
             dbInitializer.initialize();
@@ -39,7 +38,7 @@ public class Main {
             }));
             System.out.println("Server is running. Press Ctrl+C to stop.");
             Thread.currentThread().join();
-        }catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             System.out.println("Server interrupted");
             Thread.currentThread().interrupt();
         } catch (Exception e) {

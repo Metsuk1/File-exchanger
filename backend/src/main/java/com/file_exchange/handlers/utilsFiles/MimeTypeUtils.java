@@ -9,6 +9,6 @@ public class MimeTypeUtils {
         if (name.endsWith(".pdf")) return "application/pdf";
         if (name.endsWith(".txt")) return "text/plain; charset=utf-8";
         if (name.endsWith(".zip")) return "application/zip";
-        return "application/octet-stream";
+        return "application/octet-stream"; // just return .bin type
     }
 }

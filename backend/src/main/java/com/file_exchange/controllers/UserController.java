@@ -1,11 +1,8 @@
 package com.file_exchange.controllers;
 
+import com.file_exchange.annotations.*;
 import com.file_exchange.dto.UserDto;
 import com.file_exchange.services.UserService;
-import com.file_exchange.annotations.*;
-
-import java.util.List;
-import java.util.Map;
 
 @CustomRestController
 @CustomRequestMapping("/api/v1/users")
