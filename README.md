@@ -43,7 +43,10 @@ Live demo: http://85.198.88.69
 ---
 # Testing
 
-Unit and Integration Tests (JUnit 5 + Mockito)
+- Unit and Integration Tests (JUnit 5 + Mockito)
+- JaCoCo configured with exceptions for DTOs, Entities, Annotations, Controllers, Main class, Repository, Server, and JwtUtil
+- Spotless configured with Palantir Java Format
+- Coverage thresholds: Line ≥ 80%, Branch ≥ 60%
 
 ## User registration:
 
