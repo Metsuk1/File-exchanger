@@ -7,6 +7,7 @@ import static org.mockito.Mockito.doNothing;
 
 import com.file_exchange.entity.File;
 import com.file_exchange.repository.FileRepository;
+import com.file_exchange.repository.SharedLinkRepository;
 import com.file_exchange.services.FileService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -27,13 +28,16 @@ public class FileServiceTest {
     @Mock
     private FileRepository fileRepository;
 
+    @Mock
+    private SharedLinkRepository sharedLinkRepository;
+
     private FileService fileService;
     private Path tempDir;
 
     @BeforeEach
     void setUp() throws IOException {
         MockitoAnnotations.openMocks(this);
-        fileService = new FileService(fileRepository);
+        fileService = new FileService(fileRepository, sharedLinkRepository);
         tempDir = Files.createTempDirectory("test-uploads");
     }
 

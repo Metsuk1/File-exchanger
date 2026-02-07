@@ -81,6 +81,26 @@ public class FileRepository {
         }
     }
 
+    public File getFileById(Long fileId) {
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM files WHERE id = ?")) {
+            stmt.setLong(1, fileId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    File file = new File();
+                    file.setId(rs.getLong("id"));
+                    file.setUserId(rs.getLong("user_id"));
+                    file.setFileName(rs.getString("file_name"));
+                    file.setFilePath(rs.getString("file_path"));
+                    file.setSize(rs.getLong("size"));
+                    return file;
+                }
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to get file", e);
+        }
+    }
+
     public void deleteFile(Long fileId, Long userId) {
         try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM files WHERE id = ? AND user_id = ?")) {
             stmt.setLong(1, fileId);

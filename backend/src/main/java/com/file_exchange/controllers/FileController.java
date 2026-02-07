@@ -60,6 +60,24 @@ public class FileController {
         return Map.of("status", "deleted", "fileId", fileId);
     }
 
+    @CustomPostMapping("/share")
+    public Map<String, Object> share(
+            @CustomRequestHeader("Authorization") String auth,
+            @CustomRequestParam("fileId") Long fileId) {
+
+        Long userId = extractUserId(auth);
+        String token = fileService.createShareLink(userId, fileId);
+
+        return Map.of(
+                "token", token,
+                "link", "/api/v1/files/public/" + token);
+    }
+
+    @CustomGetMapping("/public/{token}")
+    public FileDto publicDownload(@CustomPathVariable("token") String token) {
+        return fileService.getFileByShareToken(token);
+    }
+
     private Long extractUserId(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new IllegalArgumentException("Missing or invalid Authorization header");

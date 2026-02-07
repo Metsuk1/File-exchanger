@@ -4,6 +4,7 @@ import com.file_exchange.controllers.FileController;
 import com.file_exchange.controllers.UserController;
 import com.file_exchange.db.DatabaseInitializer;
 import com.file_exchange.repository.FileRepository;
+import com.file_exchange.repository.SharedLinkRepository;
 import com.file_exchange.repository.UserRepository;
 import com.file_exchange.server.CustomWebServer;
 import com.file_exchange.services.FileService;
@@ -19,8 +20,9 @@ public class Main {
 
             UserRepository userRepository = new UserRepository();
             FileRepository fileRepository = new FileRepository();
+            SharedLinkRepository sharedLinkRepository = new SharedLinkRepository();
             UserService userService = new UserService(userRepository);
-            FileService fileService = new FileService(fileRepository);
+            FileService fileService = new FileService(fileRepository, sharedLinkRepository);
 
             UserController userController = new UserController(userService);
             FileController fileController = new FileController(fileService);
