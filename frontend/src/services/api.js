@@ -45,3 +45,12 @@ export const downloadFile = (fileId) =>
 
 export const deleteFile = (fileId) =>
     api.delete(`/files?fileId=${fileId}`);
+
+export const shareFile = (fileId) =>
+    api.post(`/files/share?fileId=${fileId}`);
+
+// profile
+export const getProfile = () => api.get('/users/profile');
+
+export const updateProfile = (name, email) =>
+    api.put('/users/profile', { name, email });

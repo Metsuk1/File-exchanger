@@ -23,7 +23,7 @@ public class FileController {
             @CustomRequestHeader("Authorization") String auth,
             @CustomRequestPart("file") TempFileInputStream filePart) {
 
-        Long userId = extractUserId(auth);
+        Long userId = JwtUtil.extractUserId(auth);
 
         String fileName = filePart.getOriginalFileName();
         long size = filePart.getFileSize();
@@ -35,7 +35,7 @@ public class FileController {
 
     @CustomGetMapping
     public List<File> list(@CustomRequestHeader("Authorization") String auth) {
-        Long userId = extractUserId(auth);
+        Long userId = JwtUtil.extractUserId(auth);
 
         return fileService.getUserFiles(userId);
     }
@@ -44,7 +44,7 @@ public class FileController {
     public FileDto download(
             @CustomRequestHeader("Authorization") String auth, @CustomRequestParam("fileId") Long fileId) {
 
-        Long userId = extractUserId(auth);
+        Long userId = JwtUtil.extractUserId(auth);
 
         return fileService.getUserFile(userId, fileId);
     }
@@ -53,7 +53,7 @@ public class FileController {
     public Map<String, Object> deleteFile(
             @CustomRequestHeader("Authorization") String auth, @CustomRequestParam("fileId") Long fileId) {
 
-        Long userId = extractUserId(auth);
+        Long userId = JwtUtil.extractUserId(auth);
 
         fileService.deleteFile(userId, fileId);
 
@@ -62,34 +62,16 @@ public class FileController {
 
     @CustomPostMapping("/share")
     public Map<String, Object> share(
-            @CustomRequestHeader("Authorization") String auth,
-            @CustomRequestParam("fileId") Long fileId) {
+            @CustomRequestHeader("Authorization") String auth, @CustomRequestParam("fileId") Long fileId) {
 
-        Long userId = extractUserId(auth);
+        Long userId = JwtUtil.extractUserId(auth);
         String token = fileService.createShareLink(userId, fileId);
 
-        return Map.of(
-                "token", token,
-                "link", "/api/v1/files/public/" + token);
+        return Map.of("token", token, "link", "/api/v1/files/public/" + token);
     }
 
     @CustomGetMapping("/public/{token}")
     public FileDto publicDownload(@CustomPathVariable("token") String token) {
         return fileService.getFileByShareToken(token);
-    }
-
-    private Long extractUserId(String authHeader) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Missing or invalid Authorization header");
-        }
-
-        String token = authHeader.substring(7).trim();
-        String userIdStr = JwtUtil.validateToken(token);
-
-        try {
-            return Long.parseLong(userIdStr);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid user ID in token");
-        }
     }
 }

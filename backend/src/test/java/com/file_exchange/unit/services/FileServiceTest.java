@@ -5,7 +5,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.doNothing;
 
+import com.file_exchange.dto.FileDto;
 import com.file_exchange.entity.File;
+import com.file_exchange.entity.SharedLink;
 import com.file_exchange.repository.FileRepository;
 import com.file_exchange.repository.SharedLinkRepository;
 import com.file_exchange.services.FileService;
@@ -198,5 +200,133 @@ public class FileServiceTest {
 
         assertTrue(files.isEmpty());
         verify(fileRepository, times(1)).getUserFiles(userId);
+    }
+
+    // ==================== getUserFile (happy path) ====================
+
+    @Test
+    @DisplayName("Should get user file successfully")
+    void testGetUserFileSuccess() throws IOException {
+        Long userId = 1L;
+        Long fileId = 1L;
+
+        Path testFile = Files.createTempFile(tempDir, "download-test", ".txt");
+        Files.writeString(testFile, "file content");
+
+        File file = new File(fileId, userId, "download-test.txt", testFile.toString(), 12L);
+        when(fileRepository.getFileById(fileId, userId)).thenReturn(file);
+
+        FileDto dto = fileService.getUserFile(userId, fileId);
+
+        assertNotNull(dto);
+        assertEquals("download-test.txt", dto.getFileName());
+        assertNotNull(dto.getContentType());
+        assertNotNull(dto.getInputStream());
+        dto.getInputStream().close();
+    }
+
+    // ==================== createShareLink ====================
+
+    @Test
+    @DisplayName("Should create new share link")
+    void testCreateShareLinkNew() {
+        Long userId = 1L;
+        Long fileId = 1L;
+
+        File file = new File(fileId, userId, "file.txt", "/path/file.txt", 100L);
+        when(fileRepository.getFileById(fileId, userId)).thenReturn(file);
+        when(sharedLinkRepository.findByFileId(fileId)).thenReturn(null);
+
+        String token = fileService.createShareLink(userId, fileId);
+
+        assertNotNull(token);
+        assertFalse(token.isBlank());
+        verify(sharedLinkRepository).save(any(SharedLink.class));
+    }
+
+    @Test
+    @DisplayName("Should return existing share link")
+    void testCreateShareLinkExisting() {
+        Long userId = 1L;
+        Long fileId = 1L;
+
+        File file = new File(fileId, userId, "file.txt", "/path/file.txt", 100L);
+        SharedLink existing = new SharedLink(1L, fileId, "existing-token", "2024-01-01");
+
+        when(fileRepository.getFileById(fileId, userId)).thenReturn(file);
+        when(sharedLinkRepository.findByFileId(fileId)).thenReturn(existing);
+
+        String token = fileService.createShareLink(userId, fileId);
+
+        assertEquals("existing-token", token);
+        verify(sharedLinkRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Should throw exception when creating share link for non-existent file")
+    void testCreateShareLinkFileNotFound() {
+        when(fileRepository.getFileById(999L, 1L)).thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class, () -> fileService.createShareLink(1L, 999L));
+    }
+
+    // ==================== getFileByShareToken ====================
+
+    @Test
+    @DisplayName("Should get file by share token successfully")
+    void testGetFileByShareTokenSuccess() throws IOException {
+        Path testFile = Files.createTempFile(tempDir, "shared-test", ".txt");
+        Files.writeString(testFile, "shared content");
+
+        SharedLink link = new SharedLink(1L, 1L, "valid-token", "2024-01-01");
+        File file = new File(1L, 1L, "shared-test.txt", testFile.toString(), 14L);
+
+        when(sharedLinkRepository.findByToken("valid-token")).thenReturn(link);
+        when(fileRepository.getFileById(1L)).thenReturn(file);
+
+        FileDto dto = fileService.getFileByShareToken("valid-token");
+
+        assertNotNull(dto);
+        assertEquals("shared-test.txt", dto.getFileName());
+        assertNotNull(dto.getInputStream());
+        dto.getInputStream().close();
+    }
+
+    @Test
+    @DisplayName("Should throw exception for invalid share token")
+    void testGetFileByShareTokenInvalid() {
+        when(sharedLinkRepository.findByToken("bad-token")).thenReturn(null);
+
+        IllegalArgumentException ex =
+                assertThrows(IllegalArgumentException.class, () -> fileService.getFileByShareToken("bad-token"));
+        assertEquals("Invalid share link", ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should throw exception when shared file not found in DB")
+    void testGetFileByShareTokenFileNotFound() {
+        SharedLink link = new SharedLink(1L, 999L, "token", "2024-01-01");
+        when(sharedLinkRepository.findByToken("token")).thenReturn(link);
+        when(fileRepository.getFileById(999L)).thenReturn(null);
+
+        IllegalArgumentException ex =
+                assertThrows(IllegalArgumentException.class, () -> fileService.getFileByShareToken("token"));
+        assertEquals("File not found", ex.getMessage());
+    }
+
+    // ==================== deleteFile (file not on disk) ====================
+
+    @Test
+    @DisplayName("Should delete file record even when file not on disk")
+    void testDeleteFileNotOnDisk() {
+        Long userId = 1L;
+        Long fileId = 1L;
+
+        File file = new File(fileId, userId, "gone.txt", "/nonexistent/path/gone.txt", 10L);
+        when(fileRepository.getFileById(fileId, userId)).thenReturn(file);
+
+        assertDoesNotThrow(() -> fileService.deleteFile(userId, fileId));
+        verify(sharedLinkRepository).deleteByFileId(fileId);
+        verify(fileRepository).deleteFile(fileId, userId);
     }
 }

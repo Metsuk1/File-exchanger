@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { getFiles, uploadFile, downloadFile, deleteFile } from '../services/api';
+import { getFiles, uploadFile, downloadFile, deleteFile, shareFile } from '../services/api';
 
 function FileList() {
     const [files, setFiles] = useState([]);
     const [uploading, setUploading] = useState(false);
+    const [shareLink, setShareLink] = useState('');
+    const [showShareModal, setShowShareModal] = useState(false);
 
     useEffect(() => {
         fetchFiles();
@@ -48,6 +50,23 @@ function FileList() {
         }
     };
 
+    const handleShare = async (fileId) => {
+        try {
+            const response = await shareFile(fileId);
+            const publicLink = window.location.origin + response.data.link;
+            setShareLink(publicLink);
+            setShowShareModal(true);
+        } catch (err) {
+            alert('Error creating share link');
+        }
+    };
+
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(shareLink).then(() => {
+            alert('Link copied to clipboard!');
+        });
+    };
+
     const handleDelete = async (fileId) => {
         if (!window.confirm('Delete file?')) return;
         try {
@@ -81,6 +100,9 @@ function FileList() {
                                 <button onClick={() => handleDownload(file.id, file.fileName)} className="btn-small">
                                     Download
                                 </button>
+                                <button onClick={() => handleShare(file.id)} className="btn-share">
+                                    Share
+                                </button>
                                 <button onClick={() => handleDelete(file.id)} className="btn-danger">
                                     Delete
                                 </button>
@@ -89,6 +111,19 @@ function FileList() {
                     ))
                 )}
             </ul>
+
+            {showShareModal && (
+                <div className="share-modal-overlay" onClick={() => setShowShareModal(false)}>
+                    <div className="share-modal" onClick={e => e.stopPropagation()}>
+                        <h3>Share Link</h3>
+                        <div className="share-link-box">
+                            <input type="text" value={shareLink} readOnly />
+                            <button onClick={handleCopyLink} className="btn-copy">Copy</button>
+                        </div>
+                        <button onClick={() => setShowShareModal(false)} className="btn-close-modal">Close</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

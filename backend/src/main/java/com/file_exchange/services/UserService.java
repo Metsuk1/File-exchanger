@@ -52,4 +52,26 @@ public class UserService {
 
         return JwtUtil.generateToken(user.getId());
     }
+
+    public UserDto getProfile(Long userId) {
+        UserDto user = userRepository.findById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        return user;
+    }
+
+    public UserDto updateProfile(Long userId, String name, String email) {
+        UserDto dto = new UserDto();
+        dto.setName(name);
+        dto.setEmail(email);
+        dto.validate();
+
+        if (userRepository.existsByEmailAndNotId(email, userId)) {
+            throw new IllegalArgumentException("Email is already taken by another user");
+        }
+
+        userRepository.updateUser(userId, name, email);
+        return getProfile(userId);
+    }
 }
