@@ -4,21 +4,19 @@ import com.file_exchange.entity.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.sql.DataSource;
 
 public class FileRepository {
-    private final Connection conn;
+    private final DataSource dataSource;
 
-    public FileRepository() {
-        try {
-            conn = DriverManager.getConnection("jdbc:sqlite:users.db");
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to connect to database", e);
-        }
+    public FileRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public Long saveFile(File file) {
         String sql = "INSERT INTO files (user_id, file_name, file_path, size) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, file.getUserId());
             stmt.setString(2, file.getFileName());
             stmt.setString(3, file.getFilePath());
@@ -41,7 +39,8 @@ public class FileRepository {
 
     public List<File> getUserFiles(Long userId) {
         List<File> files = new ArrayList<>();
-        try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM files WHERE user_id = ?")) {
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM files WHERE user_id = ?")) {
             stmt.setLong(1, userId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -51,7 +50,7 @@ public class FileRepository {
                     file.setFileName(rs.getString("file_name"));
                     file.setFilePath(rs.getString("file_path"));
                     file.setSize(rs.getLong("size"));
-                    files.add(file); // To change
+                    files.add(file);
                 }
             }
         } catch (SQLException e) {
@@ -61,7 +60,8 @@ public class FileRepository {
     }
 
     public File getFileById(Long fileId, Long userId) {
-        try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM files WHERE id = ? AND user_id = ?")) {
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM files WHERE id = ? AND user_id = ?")) {
             stmt.setLong(1, fileId);
             stmt.setLong(2, userId);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -82,7 +82,8 @@ public class FileRepository {
     }
 
     public File getFileById(Long fileId) {
-        try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM files WHERE id = ?")) {
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM files WHERE id = ?")) {
             stmt.setLong(1, fileId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -102,7 +103,8 @@ public class FileRepository {
     }
 
     public void deleteFile(Long fileId, Long userId) {
-        try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM files WHERE id = ? AND user_id = ?")) {
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement("DELETE FROM files WHERE id = ? AND user_id = ?")) {
             stmt.setLong(1, fileId);
             stmt.setLong(2, userId);
             stmt.executeUpdate();

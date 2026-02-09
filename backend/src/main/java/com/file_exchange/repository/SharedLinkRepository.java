@@ -2,21 +2,19 @@ package com.file_exchange.repository;
 
 import com.file_exchange.entity.SharedLink;
 import java.sql.*;
+import javax.sql.DataSource;
 
 public class SharedLinkRepository {
-    private final Connection conn;
+    private final DataSource dataSource;
 
-    public SharedLinkRepository() {
-        try {
-            conn = DriverManager.getConnection("jdbc:sqlite:users.db");
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to connect to database", e);
-        }
+    public SharedLinkRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public void save(SharedLink link) {
         String sql = "INSERT INTO shared_links (file_id, token, created_at) VALUES (?, ?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, link.getFileId());
             stmt.setString(2, link.getToken());
             stmt.setString(3, link.getCreatedAt());
@@ -34,7 +32,8 @@ public class SharedLinkRepository {
 
     public SharedLink findByToken(String token) {
         String sql = "SELECT * FROM shared_links WHERE token = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, token);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -54,7 +53,8 @@ public class SharedLinkRepository {
 
     public SharedLink findByFileId(Long fileId) {
         String sql = "SELECT * FROM shared_links WHERE file_id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, fileId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -74,7 +74,8 @@ public class SharedLinkRepository {
 
     public void deleteByFileId(Long fileId) {
         String sql = "DELETE FROM shared_links WHERE file_id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, fileId);
             stmt.executeUpdate();
         } catch (SQLException e) {

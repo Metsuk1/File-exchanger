@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="1-create-users" author="file-exchange">
+        <createTable tableName="users">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2-create-files" author="file-exchange">
+        <createTable tableName="files">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_files_user" references="users(id)"/>
+            </column>
+            <column name="file_name" type="VARCHAR(255)"/>
+            <column name="file_path" type="VARCHAR(500)"/>
+            <column name="size" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3-create-shared-links" author="file-exchange">
+        <createTable tableName="shared_links">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="file_id" type="BIGINT">
+                <constraints foreignKeyName="fk_shared_links_file" references="files(id)"/>
+            </column>
+            <column name="token" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="created_at" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4-add-indexes" author="file-exchange">
+        <createIndex indexName="idx_files_user_id" tableName="files">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex indexName="idx_shared_links_file_id" tableName="shared_links">
+            <column name="file_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
