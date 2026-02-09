@@ -35,7 +35,7 @@ function Layout({ children }) {
                     <button onClick={toggleTheme} className="theme-toggle">
                         {darkMode ? <i className="fas fa-sun"></i> : <i className="fas fa-moon"></i>}
                     </button>
-                    <div className="user-avatar">
+                    <div className="user-avatar" onClick={() => navigate('/profile')} style={{ cursor: 'pointer' }}>
                         {localStorage.getItem('userEmail')?.[0].toUpperCase() || 'U'}
                     </div>
                     <button onClick={handleLogout} className="btn-logout">

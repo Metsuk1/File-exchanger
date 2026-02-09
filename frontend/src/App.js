@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import FilesPage from './pages/FilesPage';
+import ProfilePage from './pages/ProfilePage';
 import Layout from './components/Layout';
 
 function App() {
@@ -15,6 +16,10 @@ function App() {
                 <Route
                     path="/files"
                     element={token ? <Layout><FilesPage /></Layout> : <Navigate to="/login" />}
+                />
+                <Route
+                    path="/profile"
+                    element={token ? <Layout><ProfilePage /></Layout> : <Navigate to="/login" />}
                 />
                 <Route path="/" element={<Navigate to="/files" />} />
             </Routes>

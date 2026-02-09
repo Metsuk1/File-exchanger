@@ -55,4 +55,19 @@ public class JwtUtil {
             throw new IllegalArgumentException("Invalid JWT token", e);
         }
     }
+
+    public static Long extractUserId(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Missing or invalid Authorization header");
+        }
+
+        String token = authHeader.substring(7).trim();
+        String userIdStr = validateToken(token);
+
+        try {
+            return Long.parseLong(userIdStr);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid user ID in token");
+        }
+    }
 }

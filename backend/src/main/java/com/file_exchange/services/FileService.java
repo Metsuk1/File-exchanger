@@ -2,22 +2,28 @@ package com.file_exchange.services;
 
 import com.file_exchange.dto.FileDto;
 import com.file_exchange.entity.File;
+import com.file_exchange.entity.SharedLink;
 import com.file_exchange.handlers.utilsFiles.MimeTypeUtils;
 import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import com.file_exchange.repository.FileRepository;
+import com.file_exchange.repository.SharedLinkRepository;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 public class FileService {
     private final FileRepository fileRepository;
+    private final SharedLinkRepository sharedLinkRepository;
     private final String uploadsDir = "uploads";
 
-    public FileService(FileRepository fileRepository) {
+    public FileService(FileRepository fileRepository, SharedLinkRepository sharedLinkRepository) {
         this.fileRepository = fileRepository;
+        this.sharedLinkRepository = sharedLinkRepository;
         // create dir uploads if it doesn't exist
         new java.io.File(uploadsDir).mkdirs();
     }
@@ -116,7 +122,55 @@ public class FileService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to delete file: " + e.getMessage(), e);
         }
+        sharedLinkRepository.deleteByFileId(fileId);
         fileRepository.deleteFile(fileId, userId);
+    }
+
+    public String createShareLink(Long userId, Long fileId) {
+        File file = fileRepository.getFileById(fileId, userId);
+        if (file == null) {
+            throw new IllegalArgumentException("File not found");
+        }
+
+        SharedLink existing = sharedLinkRepository.findByFileId(fileId);
+        if (existing != null) {
+            return existing.getToken();
+        }
+
+        String token = UUID.randomUUID().toString();
+        SharedLink link = new SharedLink(null, fileId, token, Instant.now().toString());
+        sharedLinkRepository.save(link);
+        return token;
+    }
+
+    public FileDto getFileByShareToken(String token) {
+        SharedLink link = sharedLinkRepository.findByToken(token);
+        if (link == null) {
+            throw new IllegalArgumentException("Invalid share link");
+        }
+
+        File file = fileRepository.getFileById(link.getFileId());
+        if (file == null) {
+            throw new IllegalArgumentException("File not found");
+        }
+
+        try {
+            InputStream is = new FileInputStream(file.getFilePath());
+            String contentType = null;
+
+            try {
+                contentType = Files.probeContentType(Paths.get(file.getFilePath()));
+            } catch (Exception ignore) {
+            }
+
+            if (contentType == null || contentType.isBlank()) {
+                contentType = MimeTypeUtils.detect(file.getFileName());
+            }
+
+            return new FileDto(file.getFileName(), contentType, is);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("File not found on disk", e);
+        }
     }
 
     public String getFilePath(Long userId, Long fileId) {

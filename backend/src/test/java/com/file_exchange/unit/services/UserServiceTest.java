@@ -190,4 +190,114 @@ public class UserServiceTest {
 
         assertThrows(IllegalArgumentException.class, () -> userService.login(email, null));
     }
+
+    // ==================== getProfile ====================
+
+    @Test
+    @DisplayName("Should return user profile successfully")
+    void testGetProfileSuccess() {
+        UserDto user = new UserDto();
+        user.setId(1L);
+        user.setName("John Doe");
+        user.setEmail("john@example.com");
+
+        when(userRepository.findById(1L)).thenReturn(user);
+
+        UserDto result = userService.getProfile(1L);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("John Doe", result.getName());
+        assertEquals("john@example.com", result.getEmail());
+        assertNull(result.getPassword());
+        verify(userRepository).findById(1L);
+    }
+
+    @Test
+    @DisplayName("Should throw exception when user not found by id")
+    void testGetProfileUserNotFound() {
+        when(userRepository.findById(999L)).thenReturn(null);
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.getProfile(999L));
+        assertEquals("User not found", ex.getMessage());
+    }
+
+    // ==================== updateProfile ====================
+
+    @Test
+    @DisplayName("Should update profile successfully")
+    void testUpdateProfileSuccess() {
+        UserDto updatedUser = new UserDto();
+        updatedUser.setId(1L);
+        updatedUser.setName("Jane Doe");
+        updatedUser.setEmail("jane@example.com");
+
+        when(userRepository.existsByEmailAndNotId("jane@example.com", 1L)).thenReturn(false);
+        when(userRepository.findById(1L)).thenReturn(updatedUser);
+
+        UserDto result = userService.updateProfile(1L, "Jane Doe", "jane@example.com");
+
+        assertNotNull(result);
+        assertEquals("Jane Doe", result.getName());
+        assertEquals("jane@example.com", result.getEmail());
+        verify(userRepository).updateUser(1L, "Jane Doe", "jane@example.com");
+        verify(userRepository).findById(1L);
+    }
+
+    @Test
+    @DisplayName("Should throw exception when updating with null name")
+    void testUpdateProfileNullName() {
+        assertThrows(IllegalArgumentException.class, () -> userService.updateProfile(1L, null, "john@example.com"));
+        verify(userRepository, never()).updateUser(any(), any(), any());
+    }
+
+    @Test
+    @DisplayName("Should throw exception when updating with empty name")
+    void testUpdateProfileEmptyName() {
+        assertThrows(IllegalArgumentException.class, () -> userService.updateProfile(1L, "   ", "john@example.com"));
+        verify(userRepository, never()).updateUser(any(), any(), any());
+    }
+
+    @Test
+    @DisplayName("Should throw exception when updating with invalid email")
+    void testUpdateProfileInvalidEmail() {
+        assertThrows(IllegalArgumentException.class, () -> userService.updateProfile(1L, "John", "not-an-email"));
+        verify(userRepository, never()).updateUser(any(), any(), any());
+    }
+
+    @Test
+    @DisplayName("Should throw exception when updating with null email")
+    void testUpdateProfileNullEmail() {
+        assertThrows(IllegalArgumentException.class, () -> userService.updateProfile(1L, "John", null));
+        verify(userRepository, never()).updateUser(any(), any(), any());
+    }
+
+    @Test
+    @DisplayName("Should throw exception when email is taken by another user")
+    void testUpdateProfileEmailTaken() {
+        when(userRepository.existsByEmailAndNotId("taken@example.com", 1L)).thenReturn(true);
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class, () -> userService.updateProfile(1L, "John", "taken@example.com"));
+        assertEquals("Email is already taken by another user", ex.getMessage());
+        verify(userRepository, never()).updateUser(any(), any(), any());
+    }
+
+    @Test
+    @DisplayName("Should allow keeping the same email when updating profile")
+    void testUpdateProfileSameEmail() {
+        UserDto updatedUser = new UserDto();
+        updatedUser.setId(1L);
+        updatedUser.setName("New Name");
+        updatedUser.setEmail("john@example.com");
+
+        when(userRepository.existsByEmailAndNotId("john@example.com", 1L)).thenReturn(false);
+        when(userRepository.findById(1L)).thenReturn(updatedUser);
+
+        UserDto result = userService.updateProfile(1L, "New Name", "john@example.com");
+
+        assertEquals("New Name", result.getName());
+        assertEquals("john@example.com", result.getEmail());
+        verify(userRepository).updateUser(1L, "New Name", "john@example.com");
+    }
 }

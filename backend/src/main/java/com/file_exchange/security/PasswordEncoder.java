@@ -8,7 +8,6 @@ import org.mindrot.jbcrypt.BCrypt;
 public class PasswordEncoder {
     private static final int BCRYPT_COST = 12;
 
-
     // This prevents timing attacks that could reveal whether an email exists
     private static final String DUMMY_HASH = BCrypt.hashpw("dummy", BCrypt.gensalt(BCRYPT_COST));
 
