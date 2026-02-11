@@ -3,6 +3,7 @@ package com.file_exchange.services;
 import com.file_exchange.dto.FileDto;
 import com.file_exchange.entity.File;
 import com.file_exchange.entity.SharedLink;
+import com.file_exchange.exceptions.NotFoundException;
 import com.file_exchange.handlers.utilsFiles.MimeTypeUtils;
 import com.file_exchange.handlers.utilsFiles.TempFileInputStream;
 import com.file_exchange.repository.FileRepository;
@@ -64,7 +65,7 @@ public class FileService {
             return fileId;
 
         } catch (Exception e) {
-            throw new IllegalArgumentException(
+            throw new RuntimeException(
                     "Failed to upload file '" + fileName + "' for user " + userId + ": " + e.getMessage(), e);
         }
     }
@@ -76,7 +77,7 @@ public class FileService {
     public FileDto getUserFile(Long userId, Long fileId) {
         File file = fileRepository.getFileById(fileId, userId);
         if (file == null) {
-            throw new IllegalArgumentException("File not found");
+            throw new NotFoundException("File not found");
         }
         try {
             InputStream is = new FileInputStream(file.getFilePath());
@@ -94,14 +95,14 @@ public class FileService {
 
             return new FileDto(file.getFileName(), contentType, is);
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("File not found", e);
+            throw new RuntimeException("File data missing from disk: " + file.getFilePath(), e);
         }
     }
 
     public void deleteFile(Long userId, Long fileId) {
         File file = fileRepository.getFileById(fileId, userId);
         if (file == null) {
-            throw new IllegalArgumentException("File not found");
+            throw new NotFoundException("File not found");
         }
 
         Path path = Paths.get(file.getFilePath());
@@ -129,7 +130,7 @@ public class FileService {
     public String createShareLink(Long userId, Long fileId) {
         File file = fileRepository.getFileById(fileId, userId);
         if (file == null) {
-            throw new IllegalArgumentException("File not found");
+            throw new NotFoundException("File not found");
         }
 
         SharedLink existing = sharedLinkRepository.findByFileId(fileId);
@@ -146,12 +147,12 @@ public class FileService {
     public FileDto getFileByShareToken(String token) {
         SharedLink link = sharedLinkRepository.findByToken(token);
         if (link == null) {
-            throw new IllegalArgumentException("Invalid share link");
+            throw new NotFoundException("Invalid share link");
         }
 
         File file = fileRepository.getFileById(link.getFileId());
         if (file == null) {
-            throw new IllegalArgumentException("File not found");
+            throw new NotFoundException("File not found");
         }
 
         try {
@@ -169,7 +170,7 @@ public class FileService {
 
             return new FileDto(file.getFileName(), contentType, is);
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("File not found on disk", e);
+            throw new RuntimeException("File data missing from disk: " + file.getFilePath(), e);
         }
     }
 

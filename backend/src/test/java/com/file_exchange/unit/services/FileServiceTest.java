@@ -8,6 +8,7 @@ import static org.mockito.Mockito.doNothing;
 import com.file_exchange.dto.FileDto;
 import com.file_exchange.entity.File;
 import com.file_exchange.entity.SharedLink;
+import com.file_exchange.exceptions.NotFoundException;
 import com.file_exchange.repository.FileRepository;
 import com.file_exchange.repository.SharedLinkRepository;
 import com.file_exchange.services.FileService;
@@ -111,7 +112,7 @@ public class FileServiceTest {
 
         when(fileRepository.getFileById(fileId, userId)).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             fileService.getUserFile(userId, fileId);
         });
     }
@@ -142,7 +143,7 @@ public class FileServiceTest {
 
         when(fileRepository.getFileById(fileId, userId)).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             fileService.deleteFile(userId, fileId);
         });
     }
@@ -267,7 +268,7 @@ public class FileServiceTest {
     void testCreateShareLinkFileNotFound() {
         when(fileRepository.getFileById(999L, 1L)).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> fileService.createShareLink(1L, 999L));
+        assertThrows(NotFoundException.class, () -> fileService.createShareLink(1L, 999L));
     }
 
     // ==================== getFileByShareToken ====================
@@ -297,8 +298,8 @@ public class FileServiceTest {
     void testGetFileByShareTokenInvalid() {
         when(sharedLinkRepository.findByToken("bad-token")).thenReturn(null);
 
-        IllegalArgumentException ex =
-                assertThrows(IllegalArgumentException.class, () -> fileService.getFileByShareToken("bad-token"));
+        NotFoundException ex =
+                assertThrows(NotFoundException.class, () -> fileService.getFileByShareToken("bad-token"));
         assertEquals("Invalid share link", ex.getMessage());
     }
 
@@ -309,8 +310,7 @@ public class FileServiceTest {
         when(sharedLinkRepository.findByToken("token")).thenReturn(link);
         when(fileRepository.getFileById(999L)).thenReturn(null);
 
-        IllegalArgumentException ex =
-                assertThrows(IllegalArgumentException.class, () -> fileService.getFileByShareToken("token"));
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> fileService.getFileByShareToken("token"));
         assertEquals("File not found", ex.getMessage());
     }
 

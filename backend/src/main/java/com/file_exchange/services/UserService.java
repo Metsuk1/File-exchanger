@@ -1,6 +1,9 @@
 package com.file_exchange.services;
 
 import com.file_exchange.dto.UserDto;
+import com.file_exchange.exceptions.AuthenticationException;
+import com.file_exchange.exceptions.BadRequestException;
+import com.file_exchange.exceptions.NotFoundException;
 import com.file_exchange.repository.UserRepository;
 import com.file_exchange.security.PasswordEncoder;
 import com.file_exchange.security.PasswordValidator;
@@ -30,7 +33,7 @@ public class UserService {
         passwordValidator.validate(password);
 
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new IllegalArgumentException("User with this email already exists");
+            throw new BadRequestException("User with this email already exists");
         }
 
         String hashedPassword = passwordEncoder.encode(password);
@@ -47,7 +50,7 @@ public class UserService {
         boolean passwordValid = passwordEncoder.matchesSafely(password, storedHash);
 
         if (!passwordValid) {
-            throw new IllegalArgumentException("Invalid email or password");
+            throw new AuthenticationException("Invalid email or password");
         }
 
         return JwtUtil.generateToken(user.getId());
@@ -56,7 +59,7 @@ public class UserService {
     public UserDto getProfile(Long userId) {
         UserDto user = userRepository.findById(userId);
         if (user == null) {
-            throw new IllegalArgumentException("User not found");
+            throw new NotFoundException("User not found");
         }
         return user;
     }
@@ -68,7 +71,7 @@ public class UserService {
         dto.validate();
 
         if (userRepository.existsByEmailAndNotId(email, userId)) {
-            throw new IllegalArgumentException("Email is already taken by another user");
+            throw new BadRequestException("Email is already taken by another user");
         }
 
         userRepository.updateUser(userId, name, email);

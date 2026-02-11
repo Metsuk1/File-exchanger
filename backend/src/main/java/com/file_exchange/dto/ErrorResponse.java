@@ -1,0 +1,14 @@
+package com.file_exchange.dto;
+
+import lombok.Getter;
+
+@Getter
+public class ErrorResponse {
+    private final String error;
+    private final int status;
+
+    public ErrorResponse(String error, int status) {
+        this.error = error;
+        this.status = status;
+    }
+}

@@ -1,6 +1,8 @@
 package com.file_exchange.handlers.dispatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.file_exchange.dto.ErrorResponse;
+import com.file_exchange.exceptions.AppException;
 import com.file_exchange.handlers.HandlerMethod;
 import com.file_exchange.http.HttpRequest;
 import com.file_exchange.http.HttpResponse;
@@ -19,11 +21,13 @@ public class RequestDispatcher {
     private final Router router;
     private final ParameterBinder parameterBinder;
     private final ResponseConverter responseConverter;
+    private final ObjectMapper objectMapper;
 
     public RequestDispatcher(Map<String, HandlerMethod> routeHandlers, ObjectMapper objectMapper) {
         this.router = new Router(routeHandlers);
         this.parameterBinder = new ParameterBinder(objectMapper);
         this.responseConverter = new ResponseConverter(objectMapper);
+        this.objectMapper = objectMapper;
     }
 
     @SneakyThrows
@@ -32,7 +36,7 @@ public class RequestDispatcher {
             // Find matching handler
             HandlerMethod handler = router.findHandler(request.getMethod(), request.getPath());
             if (handler == null) {
-                return HttpResponse.notFound();
+                return buildErrorResponse(404, "Not Found");
             }
             // Bind parameters and invoke method
             Object[] args = parameterBinder.bindParameters(handler.getMethod(), request, handler.getPath());
@@ -41,16 +45,33 @@ public class RequestDispatcher {
             return responseConverter.convertToResponse(result);
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
+            if (cause instanceof AppException appEx) {
+                return buildErrorResponse(appEx.getStatusCode(), appEx.getMessage());
+            }
             if (cause instanceof IllegalArgumentException) {
-                return HttpResponse.badRequest(cause.getMessage());
+                return buildErrorResponse(400, cause.getMessage());
             }
             log.error("Handler invocation failed", cause);
-            return HttpResponse.serverError();
+            return buildErrorResponse(500, "Internal Server Error");
         } catch (IllegalArgumentException e) {
-            return HttpResponse.badRequest("Invalid parameter types: " + e.getMessage());
+            return buildErrorResponse(400, e.getMessage());
         } catch (Exception e) {
             log.error("Unexpected error handling request", e);
-            return HttpResponse.serverError();
+            return buildErrorResponse(500, "Internal Server Error");
         }
+    }
+
+    @SneakyThrows
+    private HttpResponse buildErrorResponse(int statusCode, String message) {
+        ErrorResponse errorResponse = new ErrorResponse(message, statusCode);
+        String json = objectMapper.writeValueAsString(errorResponse);
+        String statusText =
+                switch (statusCode) {
+                    case 400 -> "Bad Request";
+                    case 401 -> "Unauthorized";
+                    case 404 -> "Not Found";
+                    default -> "Internal Server Error";
+                };
+        return HttpResponse.jsonError(statusCode, statusText, json);
     }
 }
