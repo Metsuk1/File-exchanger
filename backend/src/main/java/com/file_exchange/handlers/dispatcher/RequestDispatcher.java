@@ -7,11 +7,15 @@ import com.file_exchange.http.HttpResponse;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * // Entry point class that orchestrates request handling (SRP: Coordination only).
  */
 public class RequestDispatcher {
+    private static final Logger log = LoggerFactory.getLogger(RequestDispatcher.class);
+
     private final Router router;
     private final ParameterBinder parameterBinder;
     private final ResponseConverter responseConverter;
@@ -40,12 +44,12 @@ public class RequestDispatcher {
             if (cause instanceof IllegalArgumentException) {
                 return HttpResponse.badRequest(cause.getMessage());
             }
-            cause.printStackTrace();
+            log.error("Handler invocation failed", cause);
             return HttpResponse.serverError();
         } catch (IllegalArgumentException e) {
             return HttpResponse.badRequest("Invalid parameter types: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unexpected error handling request", e);
             return HttpResponse.serverError();
         }
     }

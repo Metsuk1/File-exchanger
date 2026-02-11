@@ -112,6 +112,18 @@
 			<version>2.15.1</version>
 		</dependency>
 
+		<!-- SLF4J + Logback -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.16</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.5.16</version>
+		</dependency>
+
 		<!-- BCrypt for password hashing -->
 		<dependency>
 			<groupId>org.mindrot</groupId>
@@ -227,7 +239,7 @@
 						<exclude>**/executor/ExecutorServiceTest.class</exclude>
 						<!-- Infrastructure classes (require real DB/Server) -->
 						<exclude>**/server/CustomWebServer.class</exclude>
-						<exclude>**/db/DatabaseInitializer.class</exclude>
+						<exclude>**/db/DatabaseConfig.class</exclude>
 						<exclude>**/repository/**</exclude>
 						<!-- Utils that depend on env vars -->
 						<exclude>**/utils/JwtUtil.class</exclude>

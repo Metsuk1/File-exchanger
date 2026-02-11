@@ -2,7 +2,7 @@ package com.file_exchange.cli;
 
 import com.file_exchange.controllers.FileController;
 import com.file_exchange.controllers.UserController;
-import com.file_exchange.db.DatabaseInitializer;
+import com.file_exchange.db.DatabaseConfig;
 import com.file_exchange.repository.FileRepository;
 import com.file_exchange.repository.SharedLinkRepository;
 import com.file_exchange.repository.UserRepository;
@@ -14,8 +14,12 @@ import com.zaxxer.hikari.HikariDataSource;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.lang.reflect.InvocationTargetException;
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         HikariDataSource hikariDataSource = null;
@@ -29,7 +33,7 @@ public class Main {
             hikariDataSource = new HikariDataSource(config);
             DataSource dataSource = hikariDataSource;
 
-            DatabaseInitializer dbInitializer = new DatabaseInitializer(dataSource);
+            DatabaseConfig dbInitializer = new DatabaseConfig(dataSource);
             dbInitializer.initialize();
 
             UserRepository userRepository = new UserRepository(dataSource);
@@ -46,22 +50,21 @@ public class Main {
             virtualServer.registerController(fileController);
 
             virtualServer.start();
-            System.out.println("CustomWebServer started on http://localhost:8080");
+            log.info("CustomWebServer started on http://localhost:8080");
 
             HikariDataSource dsToClose = hikariDataSource;
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                System.out.println("Shutting down server...");
+                log.info("Shutting down server...");
                 virtualServer.stop();
                 dsToClose.close();
             }));
-            System.out.println("Server is running. Press Ctrl+C to stop.");
+            log.info("Server is running. Press Ctrl+C to stop.");
             Thread.currentThread().join();
         } catch (InterruptedException e) {
-            System.out.println("Server interrupted");
+            log.info("Server interrupted");
             Thread.currentThread().interrupt();
         } catch (Exception e) {
-            System.out.println("CustomWebServer stopped with errors: " + e.getMessage());
-            e.printStackTrace();
+            log.error("CustomWebServer stopped with errors: {}", e.getMessage(), e);
             if (hikariDataSource != null) {
                 hikariDataSource.close();
             }
