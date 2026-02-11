@@ -136,6 +136,43 @@ class RequestDispatcherTest {
     }
 
     @Test
+    @DisplayName("OPTIONS request should return 204 with CORS headers")
+    void testOptionsPreflightReturnsCorsHeaders() {
+        HttpRequest request = createRequest("OPTIONS", "/api/hello", "", Map.of(), Map.of());
+
+        HttpResponse response = dispatcher.handleRequest(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(204);
+        assertThat(response.getHeaders()).containsEntry("Access-Control-Allow-Origin", "*");
+        assertThat(response.getHeaders())
+                .containsEntry("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+        assertThat(response.getHeaders()).containsEntry("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        assertThat(response.getHeaders()).containsEntry("Access-Control-Max-Age", "86400");
+    }
+
+    @Test
+    @DisplayName("GET response should include CORS headers")
+    void testGetResponseIncludesCorsHeaders() {
+        HttpRequest request = createRequest("GET", "/api/hello", "", Map.of(), Map.of());
+
+        HttpResponse response = dispatcher.handleRequest(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat(response.getHeaders()).containsEntry("Access-Control-Allow-Origin", "*");
+    }
+
+    @Test
+    @DisplayName("Error response should include CORS headers")
+    void testErrorResponseIncludesCorsHeaders() {
+        HttpRequest request = createRequest("GET", "/api/unknown", "", Map.of(), Map.of());
+
+        HttpResponse response = dispatcher.handleRequest(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(404);
+        assertThat(response.getHeaders()).containsEntry("Access-Control-Allow-Origin", "*");
+    }
+
+    @Test
     @DisplayName("Should return 404 for wrong HTTP method with JSON body")
     void testWrongHttpMethod() {
         HttpRequest request = createRequest("POST", "/api/hello", "", Map.of(), Map.of());

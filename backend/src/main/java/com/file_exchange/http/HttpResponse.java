@@ -72,6 +72,15 @@ public class HttpResponse {
         return r;
     }
 
+    public static HttpResponse noContent() {
+        HttpResponse r = new HttpResponse();
+        r.statusCode = 204;
+        r.statusText = "No Content";
+        r.contentType = "text/plain";
+        r.body = new byte[0];
+        return r;
+    }
+
     public static HttpResponse jsonError(int statusCode, String statusText, String jsonBody) {
         HttpResponse r = new HttpResponse();
         r.statusCode = statusCode;

@@ -32,33 +32,44 @@ public class RequestDispatcher {
 
     @SneakyThrows
     public HttpResponse handleRequest(HttpRequest request) {
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return addCorsHeaders(HttpResponse.noContent());
+        }
+
         try {
             // Find matching handler
             HandlerMethod handler = router.findHandler(request.getMethod(), request.getPath());
             if (handler == null) {
-                return buildErrorResponse(404, "Not Found");
+                return addCorsHeaders(buildErrorResponse(404, "Not Found"));
             }
             // Bind parameters and invoke method
             Object[] args = parameterBinder.bindParameters(handler.getMethod(), request, handler.getPath());
             Object result = handler.getMethod().invoke(handler.getController(), args);
             // Convert result to response
-            return responseConverter.convertToResponse(result);
+            return addCorsHeaders(responseConverter.convertToResponse(result));
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
             if (cause instanceof AppException appEx) {
-                return buildErrorResponse(appEx.getStatusCode(), appEx.getMessage());
+                return addCorsHeaders(buildErrorResponse(appEx.getStatusCode(), appEx.getMessage()));
             }
             if (cause instanceof IllegalArgumentException) {
-                return buildErrorResponse(400, cause.getMessage());
+                return addCorsHeaders(buildErrorResponse(400, cause.getMessage()));
             }
             log.error("Handler invocation failed", cause);
-            return buildErrorResponse(500, "Internal Server Error");
+            return addCorsHeaders(buildErrorResponse(500, "Internal Server Error"));
         } catch (IllegalArgumentException e) {
-            return buildErrorResponse(400, e.getMessage());
+            return addCorsHeaders(buildErrorResponse(400, e.getMessage()));
         } catch (Exception e) {
             log.error("Unexpected error handling request", e);
-            return buildErrorResponse(500, "Internal Server Error");
+            return addCorsHeaders(buildErrorResponse(500, "Internal Server Error"));
         }
+    }
+
+    private HttpResponse addCorsHeaders(HttpResponse response) {
+        return response.withHeader("Access-Control-Allow-Origin", "*")
+                .withHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS")
+                .withHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
+                .withHeader("Access-Control-Max-Age", "86400");
     }
 
     @SneakyThrows
