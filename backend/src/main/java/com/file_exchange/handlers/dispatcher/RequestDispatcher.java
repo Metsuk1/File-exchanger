@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * // Entry point class that orchestrates request handling (SRP: Coordination only).
+ * // Entry point class that orchestrates request handling
  */
 public class RequestDispatcher {
     private static final Logger log = LoggerFactory.getLogger(RequestDispatcher.class);

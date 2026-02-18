@@ -131,6 +131,13 @@
 			<version>0.4</version>
 		</dependency>
 
+		<!-- MinIO S3-compatible storage -->
+		<dependency>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>8.5.17</version>
+		</dependency>
+
 		<!-- Mockito -->
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -243,6 +250,8 @@
 						<exclude>**/repository/**</exclude>
 						<!-- Utils that depend on env vars -->
 						<exclude>**/utils/JwtUtil.class</exclude>
+						<!-- Storage (requires real MinIO) -->
+						<exclude>**/storage/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
