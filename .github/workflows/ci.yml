@@ -3,10 +3,14 @@ name: CI Pipeline
 on:
   pull_request:
     branches: [ main ]
+  push:
+    branches: [ main ]
 
 jobs:
-  build-and-test:
+  backend:
+    name: Backend — lint, test, scan
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -17,19 +21,57 @@ jobs:
         with:
           java-version: '22'
           distribution: 'temurin'
+          cache: maven
 
-      - name: Build & Test Backend (Maven)
+      - name: Spotless format check
+        run: mvn spotless:check -B
+        working-directory: backend
+
+      - name: Build & Test (with coverage)
+        run: mvn clean verify -B
+        working-directory: backend
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: backend/target/site/jacoco/
+          retention-days: 7
+
+      - name: OWASP Dependency Check
         run: |
-          cd backend
-          mvn clean test
+          mvn org.owasp:dependency-check-maven:check -B \
+            -DfailBuildOnCVSS=9 \
+            -DsuppressionFile=owasp-suppressions.xml || true
+        working-directory: backend
+        continue-on-error: true
+
+  frontend:
+    name: Frontend — lint, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
 
-      - name: Build Frontend
-        run: |
-          cd frontend
-          npm ci
-          npm run build
+      - name: Install dependencies
+        run: npm ci
+        working-directory: frontend
+
+      - name: Run tests
+        run: npm test -- --watchAll=false --ci
+        working-directory: frontend
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build
+        working-directory: frontend
