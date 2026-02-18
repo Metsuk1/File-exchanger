@@ -5,7 +5,7 @@ RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline -B
 COPY src ./src
 RUN --mount=type=cache,target=/root/.m2 mvn package -DskipTests -B
 
-FROM eclipse-temurin:22-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 WORKDIR /app
 COPY --from=build /build/target/file_exchange-0.0.1-SNAPSHOT-jar-with-dependencies.jar app.jar
