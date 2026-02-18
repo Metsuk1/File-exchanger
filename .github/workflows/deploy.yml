@@ -73,7 +73,7 @@ jobs:
           target: "/opt/file-exchanger/File-exchanger/frontend/build"
 
       - name: Deploy and verify
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
