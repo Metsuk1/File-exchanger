@@ -8,10 +8,10 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
-public class DatabaseInitializer {
+public class DatabaseConfig {
     private final DataSource dataSource;
 
-    public DatabaseInitializer(DataSource dataSource) {
+    public DatabaseConfig(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

@@ -6,8 +6,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExecutorServiceTest {
+    private static final Logger logger = LoggerFactory.getLogger(ExecutorServiceTest.class);
+
     private static PrintWriter writer;
 
     public static void main(String[] args) throws Exception {
@@ -20,7 +24,7 @@ public class ExecutorServiceTest {
             testShutdownBehavior();
             testVirtualThreadPerTaskExecutor();
 
-            System.out.println("success");
+            logger.info("All executor tests passed successfully");
         } finally {
             if (writer != null) writer.close();
         }
@@ -173,7 +177,7 @@ public class ExecutorServiceTest {
     }
 
     private static void log(String message) {
-        System.out.println(message);
+        logger.info(message);
         writer.println(message);
         writer.flush();
     }

@@ -6,6 +6,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import com.file_exchange.dto.UserDto;
+import com.file_exchange.exceptions.AuthenticationException;
+import com.file_exchange.exceptions.BadRequestException;
+import com.file_exchange.exceptions.NotFoundException;
 import com.file_exchange.repository.UserRepository;
 import com.file_exchange.security.PasswordEncoder;
 import com.file_exchange.security.PasswordValidator;
@@ -137,8 +140,8 @@ public class UserServiceTest {
         doNothing().when(passwordValidator).validate(anyString());
         when(userRepository.existsByEmail("existing@example.com")).thenReturn(true);
 
-        IllegalArgumentException ex =
-                assertThrows(IllegalArgumentException.class, () -> userService.register(dto, "StrongPass123"));
+        BadRequestException ex =
+                assertThrows(BadRequestException.class, () -> userService.register(dto, "StrongPass123"));
         assertEquals("User with this email already exists", ex.getMessage());
     }
 
@@ -151,8 +154,8 @@ public class UserServiceTest {
         when(userRepository.findUserByEmail(email)).thenReturn(null);
         when(passwordEncoder.matchesSafely(password, null)).thenReturn(false);
 
-        IllegalArgumentException exception =
-                assertThrows(IllegalArgumentException.class, () -> userService.login(email, password));
+        AuthenticationException exception =
+                assertThrows(AuthenticationException.class, () -> userService.login(email, password));
 
         assertEquals("Invalid email or password", exception.getMessage());
         verify(passwordEncoder).matchesSafely(password, null);
@@ -173,8 +176,8 @@ public class UserServiceTest {
         when(userRepository.findUserByEmail(email)).thenReturn(userDto);
         when(passwordEncoder.matchesSafely(wrongPassword, storedHash)).thenReturn(false);
 
-        IllegalArgumentException exception =
-                assertThrows(IllegalArgumentException.class, () -> userService.login(email, wrongPassword));
+        AuthenticationException exception =
+                assertThrows(AuthenticationException.class, () -> userService.login(email, wrongPassword));
 
         assertEquals("Invalid email or password", exception.getMessage());
     }
@@ -218,7 +221,7 @@ public class UserServiceTest {
     void testGetProfileUserNotFound() {
         when(userRepository.findById(999L)).thenReturn(null);
 
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.getProfile(999L));
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> userService.getProfile(999L));
         assertEquals("User not found", ex.getMessage());
     }
 
@@ -277,8 +280,8 @@ public class UserServiceTest {
     void testUpdateProfileEmailTaken() {
         when(userRepository.existsByEmailAndNotId("taken@example.com", 1L)).thenReturn(true);
 
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class, () -> userService.updateProfile(1L, "John", "taken@example.com"));
+        BadRequestException ex = assertThrows(
+                BadRequestException.class, () -> userService.updateProfile(1L, "John", "taken@example.com"));
         assertEquals("Email is already taken by another user", ex.getMessage());
         verify(userRepository, never()).updateUser(any(), any(), any());
     }

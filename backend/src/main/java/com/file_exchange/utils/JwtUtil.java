@@ -1,5 +1,6 @@
 package com.file_exchange.utils;
 
+import com.file_exchange.exceptions.AuthenticationException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
@@ -37,7 +38,7 @@ public class JwtUtil {
 
     public static String validateToken(String token) {
         if (token == null || token.isBlank()) {
-            throw new IllegalArgumentException("Token cannot be null or empty");
+            throw new AuthenticationException("Token cannot be null or empty");
         }
 
         try {
@@ -48,17 +49,17 @@ public class JwtUtil {
                     .getPayload()
                     .getSubject();
         } catch (io.jsonwebtoken.ExpiredJwtException e) {
-            throw new IllegalArgumentException("JWT token has expired", e);
+            throw new AuthenticationException("JWT token has expired", e);
         } catch (io.jsonwebtoken.security.SignatureException e) {
-            throw new IllegalArgumentException("Invalid JWT signature", e);
+            throw new AuthenticationException("Invalid JWT signature", e);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid JWT token", e);
+            throw new AuthenticationException("Invalid JWT token", e);
         }
     }
 
     public static Long extractUserId(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Missing or invalid Authorization header");
+            throw new AuthenticationException("Missing or invalid Authorization header");
         }
 
         String token = authHeader.substring(7).trim();
@@ -67,7 +68,7 @@ public class JwtUtil {
         try {
             return Long.parseLong(userIdStr);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid user ID in token");
+            throw new AuthenticationException("Invalid user ID in token");
         }
     }
 }

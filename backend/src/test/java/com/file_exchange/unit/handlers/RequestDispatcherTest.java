@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.file_exchange.annotations.CustomGetMapping;
 import com.file_exchange.annotations.CustomRequestParam;
+import com.file_exchange.exceptions.AuthenticationException;
+import com.file_exchange.exceptions.NotFoundException;
 import com.file_exchange.handlers.HandlerMethod;
 import com.file_exchange.handlers.dispatcher.RequestDispatcher;
 import com.file_exchange.http.HttpRequest;
@@ -40,6 +42,14 @@ class RequestDispatcherTest {
         routes.put(
                 "GET:/api/badrequest", new HandlerMethod(testController, badRequestMethod, "/api/badrequest", "GET"));
 
+        Method notFoundMethod = TestController.class.getMethod("notFound");
+        routes.put("GET:/api/notfound", new HandlerMethod(testController, notFoundMethod, "/api/notfound", "GET"));
+
+        Method unauthorizedMethod = TestController.class.getMethod("unauthorized");
+        routes.put(
+                "GET:/api/unauthorized",
+                new HandlerMethod(testController, unauthorizedMethod, "/api/unauthorized", "GET"));
+
         dispatcher = new RequestDispatcher(routes, new ObjectMapper());
     }
 
@@ -55,13 +65,15 @@ class RequestDispatcherTest {
     }
 
     @Test
-    @DisplayName("Should return 404 for unknown route")
+    @DisplayName("Should return 404 for unknown route with JSON body")
     void testHandleUnknownRoute() {
         HttpRequest request = createRequest("GET", "/api/unknown", "", Map.of(), Map.of());
 
         HttpResponse response = dispatcher.handleRequest(request);
 
         assertThat(response.getStatusCode()).isEqualTo(404);
+        assertThat(response.getContentType()).isEqualTo("application/json");
+        assertThat(new String(response.getBody())).contains("\"status\":404");
     }
 
     @Test
@@ -76,33 +88,99 @@ class RequestDispatcherTest {
     }
 
     @Test
-    @DisplayName("Should return 500 for server error")
+    @DisplayName("Should return 500 for server error with JSON body")
     void testHandleServerError() {
         HttpRequest request = createRequest("GET", "/api/error", "", Map.of(), Map.of());
 
         HttpResponse response = dispatcher.handleRequest(request);
 
         assertThat(response.getStatusCode()).isEqualTo(500);
+        assertThat(response.getContentType()).isEqualTo("application/json");
+        assertThat(new String(response.getBody())).contains("\"status\":500");
     }
 
     @Test
-    @DisplayName("Should return 400 for IllegalArgumentException")
+    @DisplayName("Should return 400 for IllegalArgumentException with JSON body")
     void testHandleBadRequest() {
         HttpRequest request = createRequest("GET", "/api/badrequest", "", Map.of(), Map.of());
 
         HttpResponse response = dispatcher.handleRequest(request);
 
         assertThat(response.getStatusCode()).isEqualTo(400);
+        assertThat(response.getContentType()).isEqualTo("application/json");
+        assertThat(new String(response.getBody())).contains("\"error\":\"Invalid input\"");
     }
 
     @Test
-    @DisplayName("Should return 404 for wrong HTTP method")
+    @DisplayName("Should return 404 for NotFoundException with JSON body")
+    void testHandleNotFoundException() {
+        HttpRequest request = createRequest("GET", "/api/notfound", "", Map.of(), Map.of());
+
+        HttpResponse response = dispatcher.handleRequest(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(404);
+        assertThat(response.getContentType()).isEqualTo("application/json");
+        assertThat(new String(response.getBody())).contains("\"error\":\"Resource not found\"");
+    }
+
+    @Test
+    @DisplayName("Should return 401 for AuthenticationException with JSON body")
+    void testHandleAuthenticationException() {
+        HttpRequest request = createRequest("GET", "/api/unauthorized", "", Map.of(), Map.of());
+
+        HttpResponse response = dispatcher.handleRequest(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(401);
+        assertThat(response.getContentType()).isEqualTo("application/json");
+        assertThat(new String(response.getBody())).contains("\"error\":\"Invalid credentials\"");
+    }
+
+    @Test
+    @DisplayName("OPTIONS request should return 204 with CORS headers")
+    void testOptionsPreflightReturnsCorsHeaders() {
+        HttpRequest request = createRequest("OPTIONS", "/api/hello", "", Map.of(), Map.of());
+
+        HttpResponse response = dispatcher.handleRequest(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(204);
+        assertThat(response.getHeaders()).containsEntry("Access-Control-Allow-Origin", "*");
+        assertThat(response.getHeaders())
+                .containsEntry("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+        assertThat(response.getHeaders()).containsEntry("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        assertThat(response.getHeaders()).containsEntry("Access-Control-Max-Age", "86400");
+    }
+
+    @Test
+    @DisplayName("GET response should include CORS headers")
+    void testGetResponseIncludesCorsHeaders() {
+        HttpRequest request = createRequest("GET", "/api/hello", "", Map.of(), Map.of());
+
+        HttpResponse response = dispatcher.handleRequest(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat(response.getHeaders()).containsEntry("Access-Control-Allow-Origin", "*");
+    }
+
+    @Test
+    @DisplayName("Error response should include CORS headers")
+    void testErrorResponseIncludesCorsHeaders() {
+        HttpRequest request = createRequest("GET", "/api/unknown", "", Map.of(), Map.of());
+
+        HttpResponse response = dispatcher.handleRequest(request);
+
+        assertThat(response.getStatusCode()).isEqualTo(404);
+        assertThat(response.getHeaders()).containsEntry("Access-Control-Allow-Origin", "*");
+    }
+
+    @Test
+    @DisplayName("Should return 404 for wrong HTTP method with JSON body")
     void testWrongHttpMethod() {
         HttpRequest request = createRequest("POST", "/api/hello", "", Map.of(), Map.of());
 
         HttpResponse response = dispatcher.handleRequest(request);
 
         assertThat(response.getStatusCode()).isEqualTo(404);
+        assertThat(response.getContentType()).isEqualTo("application/json");
     }
 
     private HttpRequest createRequest(
@@ -129,6 +207,16 @@ class RequestDispatcherTest {
         @CustomGetMapping("/api/badrequest")
         public String badRequest() {
             throw new IllegalArgumentException("Invalid input");
+        }
+
+        @CustomGetMapping("/api/notfound")
+        public String notFound() {
+            throw new NotFoundException("Resource not found");
+        }
+
+        @CustomGetMapping("/api/unauthorized")
+        public String unauthorized() {
+            throw new AuthenticationException("Invalid credentials");
         }
     }
 }

@@ -15,8 +15,12 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CustomWebServer {
+    private static final Logger log = LoggerFactory.getLogger(CustomWebServer.class);
+
     private final int port;
     private final CustomExecutorService executor;
     private ServerSocket serverSocket;
@@ -50,7 +54,7 @@ public class CustomWebServer {
                 executor.execute(() -> handleClient(clientSocket));
             } catch (Exception e) {
                 if (running) {
-                    e.printStackTrace();
+                    log.error("Error accepting client connection", e);
                 }
             }
         }
@@ -84,15 +88,13 @@ public class CustomWebServer {
 
         } catch (Exception e) {
             if (running) {
-                System.err.println("CustomWebServer - Error while handling client: " + e.getMessage());
-                e.printStackTrace(System.err);
+                log.error("Error while handling client: {}", e.getMessage(), e);
             }
         } finally {
             try {
                 clientSocket.close();
             } catch (IOException e) {
-                // Explicitly silenced -closing quietly since socket is already disconnected
-                System.err.println("CustomWebServer socket close failed so it will be ignore: " + e.getMessage());
+                log.error("Socket close failed (will be ignored): {}", e.getMessage());
             }
         }
     }
@@ -125,8 +127,7 @@ public class CustomWebServer {
                 serverSocket.close();
             }
         } catch (IOException e) {
-            System.err.println("Error closing server socket: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Error closing server socket: {}", e.getMessage(), e);
         } finally {
             executor.shutdown();
         }
@@ -135,7 +136,7 @@ public class CustomWebServer {
     public void registerController(Object controller) {
         Class<?> clas = controller.getClass();
         if (!clas.isAnnotationPresent(CustomRestController.class)) {
-            System.out.println(clas.getName() + " is not a @CustomRestController");
+            log.warn("{} is not a @CustomRestController", clas.getName());
             return;
         }
 

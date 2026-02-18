@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Getter
 public class CustomExecutorService implements ExecutorService {
+    private static final Logger log = LoggerFactory.getLogger(CustomExecutorService.class);
+
     private final int corePoolSize;
     private final boolean useVirtualThreads;
     private final String threadNamePrefix;
@@ -131,8 +135,7 @@ public class CustomExecutorService implements ExecutorService {
                     }
                     // Otherwise, continue (rare case)
                 } catch (Throwable t) { // Catch Throwable for reliability
-                    System.err.println("Task execution failed: " + t.getMessage());
-                    t.printStackTrace();
+                    log.error("Task execution failed: {}", t.getMessage(), t);
                 }
             }
             shutdownLatch.countDown(); // Уменьшаем счётчик в finally

@@ -2,20 +2,27 @@ package com.file_exchange.cli;
 
 import com.file_exchange.controllers.FileController;
 import com.file_exchange.controllers.UserController;
-import com.file_exchange.db.DatabaseInitializer;
+import com.file_exchange.db.DatabaseConfig;
 import com.file_exchange.repository.FileRepository;
 import com.file_exchange.repository.SharedLinkRepository;
 import com.file_exchange.repository.UserRepository;
 import com.file_exchange.server.CustomWebServer;
 import com.file_exchange.services.FileService;
 import com.file_exchange.services.UserService;
+import com.file_exchange.storage.MinioInitializer;
+import com.file_exchange.storage.MinioStorageService;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.cdimascio.dotenv.Dotenv;
+import io.minio.MinioClient;
 import java.lang.reflect.InvocationTargetException;
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         HikariDataSource hikariDataSource = null;
@@ -29,14 +36,30 @@ public class Main {
             hikariDataSource = new HikariDataSource(config);
             DataSource dataSource = hikariDataSource;
 
-            DatabaseInitializer dbInitializer = new DatabaseInitializer(dataSource);
+            DatabaseConfig dbInitializer = new DatabaseConfig(dataSource);
             dbInitializer.initialize();
+
+            // MinIO setup
+            String minioEndpoint = dotenv.get("MINIO_ENDPOINT", "http://localhost:9000");
+            String minioAccessKey = dotenv.get("MINIO_ACCESS_KEY", "minioadmin");
+            String minioSecretKey = dotenv.get("MINIO_SECRET_KEY", "minioadmin");
+            String minioBucket = dotenv.get("MINIO_BUCKET", "file-exchange");
+
+            MinioClient minioClient = MinioClient.builder()
+                    .endpoint(minioEndpoint)
+                    .credentials(minioAccessKey, minioSecretKey)
+                    .build();
+
+            MinioInitializer minioInitializer = new MinioInitializer(minioClient, minioBucket);
+            minioInitializer.initialize();
+
+            MinioStorageService storageService = new MinioStorageService(minioClient, minioBucket);
 
             UserRepository userRepository = new UserRepository(dataSource);
             FileRepository fileRepository = new FileRepository(dataSource);
             SharedLinkRepository sharedLinkRepository = new SharedLinkRepository(dataSource);
             UserService userService = new UserService(userRepository);
-            FileService fileService = new FileService(fileRepository, sharedLinkRepository);
+            FileService fileService = new FileService(fileRepository, sharedLinkRepository, storageService);
 
             UserController userController = new UserController(userService);
             FileController fileController = new FileController(fileService);
@@ -46,22 +69,21 @@ public class Main {
             virtualServer.registerController(fileController);
 
             virtualServer.start();
-            System.out.println("CustomWebServer started on http://localhost:8080");
+            log.info("CustomWebServer started on http://localhost:8080");
 
             HikariDataSource dsToClose = hikariDataSource;
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                System.out.println("Shutting down server...");
+                log.info("Shutting down server...");
                 virtualServer.stop();
                 dsToClose.close();
             }));
-            System.out.println("Server is running. Press Ctrl+C to stop.");
+            log.info("Server is running. Press Ctrl+C to stop.");
             Thread.currentThread().join();
         } catch (InterruptedException e) {
-            System.out.println("Server interrupted");
+            log.info("Server interrupted");
             Thread.currentThread().interrupt();
         } catch (Exception e) {
-            System.out.println("CustomWebServer stopped with errors: " + e.getMessage());
-            e.printStackTrace();
+            log.error("CustomWebServer stopped with errors: {}", e.getMessage(), e);
             if (hikariDataSource != null) {
                 hikariDataSource.close();
             }

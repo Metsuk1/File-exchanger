@@ -71,4 +71,22 @@ public class HttpResponse {
         r.body = "Access Denied".getBytes();
         return r;
     }
+
+    public static HttpResponse noContent() {
+        HttpResponse r = new HttpResponse();
+        r.statusCode = 204;
+        r.statusText = "No Content";
+        r.contentType = "text/plain";
+        r.body = new byte[0];
+        return r;
+    }
+
+    public static HttpResponse jsonError(int statusCode, String statusText, String jsonBody) {
+        HttpResponse r = new HttpResponse();
+        r.statusCode = statusCode;
+        r.statusText = statusText;
+        r.contentType = "application/json";
+        r.body = jsonBody.getBytes();
+        return r;
+    }
 }
