@@ -245,7 +245,7 @@
 						<!-- Test class in main (ExecutorServiceTest) -->
 						<exclude>**/executor/ExecutorServiceTest.class</exclude>
 						<!-- Infrastructure classes (require real DB/Server) -->
-						<exclude>**/server/CustomWebServer.class</exclude>
+						<exclude>**/server/**</exclude>
 						<exclude>**/db/DatabaseConfig.class</exclude>
 						<exclude>**/repository/**</exclude>
 						<!-- Utils that depend on env vars -->

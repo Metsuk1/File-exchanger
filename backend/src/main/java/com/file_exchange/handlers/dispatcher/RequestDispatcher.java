@@ -6,8 +6,8 @@ import com.file_exchange.exceptions.AppException;
 import com.file_exchange.handlers.HandlerMethod;
 import com.file_exchange.http.HttpRequest;
 import com.file_exchange.http.HttpResponse;
+import com.file_exchange.server.RouteRegistry;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +23,8 @@ public class RequestDispatcher {
     private final ResponseConverter responseConverter;
     private final ObjectMapper objectMapper;
 
-    public RequestDispatcher(Map<String, HandlerMethod> routeHandlers, ObjectMapper objectMapper) {
-        this.router = new Router(routeHandlers);
+    public RequestDispatcher(RouteRegistry routeRegistry, ObjectMapper objectMapper) {
+        this.router = new Router(routeRegistry);
         this.parameterBinder = new ParameterBinder(objectMapper);
         this.responseConverter = new ResponseConverter(objectMapper);
         this.objectMapper = objectMapper;

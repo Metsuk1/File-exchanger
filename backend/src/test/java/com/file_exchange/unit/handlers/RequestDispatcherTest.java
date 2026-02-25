@@ -11,6 +11,7 @@ import com.file_exchange.handlers.HandlerMethod;
 import com.file_exchange.handlers.dispatcher.RequestDispatcher;
 import com.file_exchange.http.HttpRequest;
 import com.file_exchange.http.HttpResponse;
+import com.file_exchange.server.RouteRegistry;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,30 +28,31 @@ class RequestDispatcherTest {
     @BeforeEach
     void setUp() throws NoSuchMethodException {
         testController = new TestController();
-        Map<String, HandlerMethod> routes = new HashMap<>();
+        RouteRegistry registry = new RouteRegistry();
 
         Method helloMethod = TestController.class.getMethod("hello");
-        routes.put("GET:/api/hello", new HandlerMethod(testController, helloMethod, "/api/hello", "GET"));
+        registry.register("GET:/api/hello", new HandlerMethod(testController, helloMethod, "/api/hello", "GET"));
 
         Method echoMethod = TestController.class.getMethod("echo", String.class);
-        routes.put("GET:/api/echo", new HandlerMethod(testController, echoMethod, "/api/echo", "GET"));
+        registry.register("GET:/api/echo", new HandlerMethod(testController, echoMethod, "/api/echo", "GET"));
 
         Method errorMethod = TestController.class.getMethod("error");
-        routes.put("GET:/api/error", new HandlerMethod(testController, errorMethod, "/api/error", "GET"));
+        registry.register("GET:/api/error", new HandlerMethod(testController, errorMethod, "/api/error", "GET"));
 
         Method badRequestMethod = TestController.class.getMethod("badRequest");
-        routes.put(
+        registry.register(
                 "GET:/api/badrequest", new HandlerMethod(testController, badRequestMethod, "/api/badrequest", "GET"));
 
         Method notFoundMethod = TestController.class.getMethod("notFound");
-        routes.put("GET:/api/notfound", new HandlerMethod(testController, notFoundMethod, "/api/notfound", "GET"));
+        registry.register(
+                "GET:/api/notfound", new HandlerMethod(testController, notFoundMethod, "/api/notfound", "GET"));
 
         Method unauthorizedMethod = TestController.class.getMethod("unauthorized");
-        routes.put(
+        registry.register(
                 "GET:/api/unauthorized",
                 new HandlerMethod(testController, unauthorizedMethod, "/api/unauthorized", "GET"));
 
-        dispatcher = new RequestDispatcher(routes, new ObjectMapper());
+        dispatcher = new RequestDispatcher(registry, new ObjectMapper());
     }
 
     @Test

@@ -17,7 +17,7 @@ function Register() {
             alert('Registration successful! Sign in.');
             navigate('/login');
         } catch (err) {
-            setError(err.response?.data || 'Registration error');
+            setError(err.response?.data?.error || err.message);
         }
     };
 

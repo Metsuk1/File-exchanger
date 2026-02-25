@@ -1,27 +1,28 @@
 package com.file_exchange.handlers.dispatcher;
 
 import com.file_exchange.handlers.HandlerMethod;
+import com.file_exchange.server.RouteRegistry;
 import java.util.Map;
 
 /**
  * Handles route matching, including path variables.
  */
 public class Router {
-    private final Map<String, HandlerMethod> routeHandlers;
+    private final RouteRegistry routeRegistry;
 
-    public Router(Map<String, HandlerMethod> routeHandlers) {
-        this.routeHandlers = routeHandlers;
+    public Router(RouteRegistry routeRegistry) {
+        this.routeRegistry = routeRegistry;
     }
 
     public HandlerMethod findHandler(String method, String rawPath) {
         String path = extractPathWithoutQuery(rawPath);
         String key = method + ":" + path;
-        HandlerMethod handler = routeHandlers.get(key);
+        HandlerMethod handler = routeRegistry.getHandler(key);
         if (handler != null) {
             return handler;
         }
         // Check for path variable matches
-        for (Map.Entry<String, HandlerMethod> entry : routeHandlers.entrySet()) {
+        for (Map.Entry<String, HandlerMethod> entry : routeRegistry.entrySet()) {
             String routeKey = entry.getKey();
             String routeMethod = extractMethodFromKey(routeKey);
             String routePath = extractPathFromKey(routeKey);
