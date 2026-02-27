@@ -11,7 +11,7 @@ function Login() {
             await login(email, password);
             window.location.href = '/files';
         } catch (error) {
-            alert('Error to login: ' + (error.response?.data || 'Check console'));
+            alert('Error to login: ' + (error.response?.data?.error || error.message));
         }
     };
 

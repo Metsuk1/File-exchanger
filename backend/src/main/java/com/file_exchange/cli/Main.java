@@ -7,6 +7,7 @@ import com.file_exchange.repository.FileRepository;
 import com.file_exchange.repository.SharedLinkRepository;
 import com.file_exchange.repository.UserRepository;
 import com.file_exchange.server.CustomWebServer;
+import com.file_exchange.server.RouteRegistry;
 import com.file_exchange.services.FileService;
 import com.file_exchange.services.UserService;
 import com.file_exchange.storage.MinioInitializer;
@@ -64,10 +65,11 @@ public class Main {
             UserController userController = new UserController(userService);
             FileController fileController = new FileController(fileService);
 
-            CustomWebServer virtualServer = new CustomWebServer(8080, 200, true);
-            virtualServer.registerController(userController);
-            virtualServer.registerController(fileController);
+            RouteRegistry registry = new RouteRegistry();
+            registry.registerController(userController);
+            registry.registerController(fileController);
 
+            CustomWebServer virtualServer = new CustomWebServer(8080, 200, true, registry);
             virtualServer.start();
             log.info("CustomWebServer started on http://localhost:8080");
 

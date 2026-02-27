@@ -77,6 +77,7 @@ public class UserRepository {
         String sql = "SELECT id, name, email FROM users WHERE id = ?";
         try (Connection conn = dataSource.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setLong(1, id);
 
             try (ResultSet rs = stmt.executeQuery()) {
